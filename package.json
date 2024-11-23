@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migration:new": "supabase migration new",
+    "migration:apply": "supabase migration up --linked && npm run generate:supabase",
+    "generate:supabase": "supabase gen types typescript --linked > src/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
@@ -20,6 +23,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
+    "supabase": "^1.223.10",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
