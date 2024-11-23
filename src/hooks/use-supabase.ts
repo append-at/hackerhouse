@@ -1,6 +1,6 @@
-import { createClient } from '../utils/supabase/client';
+import { createBrowserSupabase } from '@/lib/db/client-rls';
 
 export const useSupabaseClient = () => {
-  const client = createClient();
+  const client = createBrowserSupabase();
   return client;
 };

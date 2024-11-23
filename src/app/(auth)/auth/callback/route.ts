@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabase } from '@/lib/db/client-rls';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     return redirect('/');
   }
 
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   // return the user to an error page with instructions

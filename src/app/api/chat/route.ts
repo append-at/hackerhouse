@@ -1,3 +1,5 @@
+import { createServerSupabase } from '@/lib/db/client-rls';
+import { getCurrentUser } from '@/lib/db/queries';
 import { openai } from '@ai-sdk/openai';
 import { jsonSchema, streamText, tool } from 'ai';
 
@@ -5,39 +7,51 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+  const supabase = await createServerSupabase();
+  const user = await getCurrentUser(supabase);
 
   const result = streamText({
     model: openai('gpt-4o'),
-    system: `VERY IMPORTANT: If tool calls, please output in the format given below. The system will parse the XML tags below and render the UI.
-    IMPORTANT: tools must be run once and only once.`,
+    system: `You're Hecky, the friend of ${user.username}.
+User Profile: ${JSON.stringify(user)}
+
+Rules:
+- Keep your responses concise and helpful.
+- Use casual, friendly language but be serious.
+`,
+    experimental_activeTools: ['askForSharingInsight'],
     messages,
     tools: {
-      quote_message: tool({
+      askForSharingInsight: tool({
         description:
-          'Quote a message from the context. Use to quote something someone else, another great person, said.',
-        parameters: jsonSchema<{ quote: string; author: string }>({
+          'Use this tool if user has shared something that you think is important, and you want to share to other users. It should have: 1. novel perspective 2. depth of understanding',
+        parameters: jsonSchema<{ quote: string }>({
           type: 'object',
           properties: {
             quote: {
               type: 'string',
-              description: 'The message being quoted',
-            },
-            author: {
-              type: 'string',
-              description: 'The author of the quoted message',
+              description: 'The quote of the message user is said.',
             },
           },
-          required: ['quote', 'author'],
+          required: ['quote'],
         }),
-        execute: async ({ quote, author }) => {
-          return `VERY IMPORTANT: Please output in the format given below. The system will parse the XML tags below and render the UI.
-Very important: Before writing the quote_message_result tag, write YOUR_MESSAGE (just enough to say who wrote it) and then write the XML tag on the next line.
-
-\`\`\`
-{{YOUR_MESSAGE}}
-<quote_message_result><quote>${quote}</quote><author>${author}</author></quote_message_result>
-\`\`\`
-`;
+        execute: async ({ quote }) => {
+          return 'Confirmation sent to user. Now user should confirm.';
+        },
+      }),
+      userConfirmedToShare: tool({
+        description: 'Use this tool if user has confirmed to share the insight.',
+        parameters: jsonSchema<{ quote: string }>({
+          type: 'object',
+          properties: {
+            quote: {
+              type: 'string',
+              description: 'The quote of the message user is said.',
+            },
+          },
+        }),
+        execute: async ({ quote }) => {
+          return 'Shared to other users.';
         },
       }),
     },
