@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { Header } from '../../_layouts/header';
+import { Header, HeaderWithDepth } from '../../_layouts/header';
 import { Profile, ProfileSchema } from './schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUser } from '@/app/context';
@@ -45,10 +45,13 @@ const Page = () => {
 
   return (
     <>
-      <Header title='Profile' />
+      <HeaderWithDepth
+        path='/setting'
+        title='Profile'
+      />
 
       <div className='w-full space-y-6 px-6'>
-        <div className='space-y-3 pb-8 text-center'>
+        <div className='space-y-3 py-8 text-center'>
           <Avatar className='mx-auto size-20'>
             <AvatarImage src={user.avatar_url ?? ''} />
             <AvatarFallback>{user.name?.[0].toUpperCase()}</AvatarFallback>
