@@ -12,7 +12,7 @@ export const Header = ({ title, className, ...props }: Props) => (
     {...props}
     className={cn('pt-safe flex h-20 shrink-0 items-center px-6', className)}
   >
-    <h1 className='text-3xl font-semibold'>{title}</h1>
+    <h1 className='text-3xl font-bold tracking-tight'>{title}</h1>
   </header>
 );
 

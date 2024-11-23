@@ -50,8 +50,6 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
     });
   }, [messages]);
 
-  console.log('testing', messages);
-
   return (
     <div className='flex h-full min-h-0 flex-col bg-black text-white'>
       <div

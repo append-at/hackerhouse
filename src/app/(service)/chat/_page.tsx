@@ -99,7 +99,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                               'shadow-inner shadow-foreground/50',
                             )}
                           >
-                            <p className='font-display font-medium text-primary-foreground'>
+                            <p className='font-display text-lg font-medium leading-snug tracking-tight text-primary-foreground'>
                               <Balancer>{args.quote}</Balancer>
                             </p>
                             <div className='flex items-center gap-2'>
