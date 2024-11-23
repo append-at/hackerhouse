@@ -69,17 +69,6 @@ Your another role is to share insight from the ${user.username} to other users:
       }),
     },
     maxSteps: 2,
-    onFinish: async (message) => {
-      const conversations = [
-        [...messages.pop()],
-        {
-          role: 'assistant',
-          content: message.text,
-        },
-      ];
-
-      await supabase.from('ai_conversation').insert({ user_id: user.id, data: conversations }).throwOnError();
-    },
   });
 
   return result.toDataStreamResponse();

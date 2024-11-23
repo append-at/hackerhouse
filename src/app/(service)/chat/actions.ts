@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
 import { Message } from 'ai';
 
-export const syncChatConversations = async (data: Message[], chatInstantId?: string) => {
+export const syncChatConversations = async (chatInstantId: string, data: Message[]) => {
   const supabase = await createServerSupabase();
   const user = await getCurrentUser(supabase);
 

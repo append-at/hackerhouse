@@ -23,7 +23,7 @@ export default function ChatMessageBubble({
       <Card
         className={cn(
           'inline-block max-w-xs space-y-2 rounded-xl border-none text-left',
-          isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-4' : 'bg-transparent pl-2 pt-4 font-display',
+          isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-3' : 'bg-transparent pl-2 pt-4 font-display',
           className,
         )}
       >
