@@ -7,6 +7,8 @@ export type IntimacyActionType =
   | 'GOOD_CONVERSATION'
   | 'DEEP_CONVERSATION'
   | 'NEW_INSIGHT'
+  | 'OFFENDED'
+  | 'BAD_CONVERSATION'
   | 'TIME_DECAY';
 
 const INITIAL_VALUE = 30;
@@ -18,9 +20,11 @@ const normalizeIntimacy = (intimacy: number) => Math.max(MIN_VALUE, Math.min(MAX
 
 const DELTA: Record<IntimacyActionType, number> = {
   // 증가 요소 (퍼센트)
-  DAILY_LOGIN: 1,
-  GOOD_CONVERSATION: 2,
-  DEEP_CONVERSATION: 3,
+  DAILY_LOGIN: 0.5,
+  GOOD_CONVERSATION: 1.5,
+  DEEP_CONVERSATION: 2.5,
+  OFFENDED: -1.5,
+  BAD_CONVERSATION: -1.5,
   NEW_INSIGHT: 2.5,
   TIME_DECAY: -0.5,
 };
@@ -66,11 +70,10 @@ export async function updateIntimacy(
   const supabase = createAdminSupabase();
   const currentIntimacy = await getCurrentIntimacy(userId);
 
-  // 변화량 계산
+  // check delta
   let newIntimacy = normalizeIntimacy(currentIntimacy * (1 + DELTA[actionType] / 100) ** multiplier);
 
   if (newIntimacy > currentIntimacy) {
-    // 일일 최대 증가량 체크
     const dailyIncrease = await getDailyIncrease(userId);
     if (dailyIncrease + newIntimacy - currentIntimacy > DAILY_MAX_INCREASE) {
       newIntimacy = normalizeIntimacy(currentIntimacy + DAILY_MAX_INCREASE);

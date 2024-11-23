@@ -1,11 +1,12 @@
 import { createInsight } from '@/actions/insights';
-import { updateIntimacy } from '@/actions/intimacy';
+import { getCurrentIntimacy, updateIntimacy } from '@/actions/intimacy';
 import { Tables } from '@/database.types';
 import { jsonSchema, Message, tool } from 'ai';
 import { peoplexity } from './peoplexity';
 import { connectPeople } from '@/actions/conversation/connectPeople';
 
 export async function aiChatAgent(user: Tables<'user'>, messages: Message[]) {
+  const intimacy = await getCurrentIntimacy(user.id);
   const lastMessages = JSON.stringify(messages.slice(-3));
   const askedForInsight = lastMessages.includes('askForSharingInsight');
   const confirmedToShareInsight = lastMessages.includes('userConfirmedToShareInsight');
@@ -17,6 +18,9 @@ User Profile: ${JSON.stringify(user)}
 Rules:
 - Keep your responses concise and helpful.
 - Use casual, friendly language but be serious.
+
+Your Current Intimacy to the User: ${intimacy} (Start: 30, Min: 0, Max: 100)
+Your friendliness can vary by the current intimacy, and you can increase/decrease intimacy by calling increaseIntimacy/decreaseIntimacy tool.
 
 Your another role is to share insight from the ${user.username} to other users:
 - Call askForSharingInsight if user has shared something that you think is important, and you want to share to other users.
@@ -80,13 +84,46 @@ Call searchForInsight if user has any concern/question/consideration.
         return await peoplexity(user.id, situation, consideration);
       },
     }),
+    increaseIntimacy: tool({
+      description: 'Use this tool to increase intimacy',
+      parameters: jsonSchema<{ type: 'GOOD_CONVERSATION' | 'DEEP_CONVERSATION'; reason: string }>({
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['GOOD_CONVERSATION', 'DEEP_CONVERSATION'] },
+          reason: { type: 'string', description: 'Reason for increasing intimacy' },
+        },
+        required: ['type', 'reason'],
+      }),
+      execute: async ({ type, reason }) => {
+        await updateIntimacy(user.id, type, reason);
+        return 'Intimacy increased!';
+      },
+    }),
+    decreaseIntimacy: tool({
+      description: 'Use this tool to decrease intimacy',
+      parameters: jsonSchema<{ type: 'OFFENDED' | 'BAD_CONVERSATION'; reason: string }>({
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['OFFENDED', 'BAD_CONVERSATION'] },
+          reason: { type: 'string', description: 'Reason for decreasing intimacy' },
+        },
+        required: ['type', 'reason'],
+      }),
+      execute: async ({ type, reason }) => {
+        await updateIntimacy(user.id, type, reason);
+        return 'Intimacy decreased!';
+      },
+    }),
     connectPeople: tool({
       description: 'Use this tool to connect user to another user',
       parameters: jsonSchema<{ userId: string; reason: string }>({
         type: 'object',
         properties: {
           userId: { type: 'string', description: 'UUID of the user who gave the insight. Otherwise will be rejected' },
-          reason: { type: 'string', description: 'Reason for connection (will be shown to the user. should look authentic and interesting)' },
+          reason: {
+            type: 'string',
+            description: 'Reason for connection (will be shown to the user. should look authentic and interesting)',
+          },
         },
         required: ['userId'],
       }),

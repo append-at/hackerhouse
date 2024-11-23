@@ -5,7 +5,7 @@ import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
-import { HeartIcon, LightbulbIcon, SearchIcon } from 'lucide-react';
+import { HeartCrackIcon, HeartIcon, LightbulbIcon, LinkIcon, SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
@@ -159,6 +159,27 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                           quote={insight.quote}
                           avatar_url={insight.avatar_url}
                           username={insight.username}
+                        />
+                      );
+                    } else if (toolName === 'increaseIntimacy') {
+                      return (
+                        <ChatReactionIndicator
+                          icon={HeartIcon}
+                          text='Friendship Increased'
+                        />
+                      );
+                    } else if (toolName === 'decreaseIntimacy') {
+                      return (
+                        <ChatReactionIndicator
+                          icon={HeartCrackIcon}
+                          text='Friendship Decreased'
+                        />
+                      );
+                    } else if (toolName === 'connectPeople') {
+                      return (
+                        <ChatReactionIndicator
+                          icon={LinkIcon}
+                          text='Connected!'
                         />
                       );
                     }
