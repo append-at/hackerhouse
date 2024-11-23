@@ -61,10 +61,14 @@ export async function connectPeople({
   const supabase = createAdminSupabase();
   const openai = new OpenAI();
 
+  console.log('Connecting people', userId, otherUserId, reason);
+
   const conversation = await createUserConversation(supabase, {
     user_id: userId,
     other_user_id: otherUserId,
   });
+
+  console.log('Created conversation', conversation.id);
 
   const { data: user } = await supabase
     .from('user')
@@ -103,6 +107,8 @@ Rules:
     ],
   });
   const message = choices[0].message.content!;
+
+  console.log('Sending message', message);
 
   await sendMessageToConversation({
     conversation,

@@ -30,7 +30,8 @@ export async function peoplexity(userId: string, situation: string, consideratio
   const currentIntimacy = await getCurrentIntimacy(userId);
 
   // TODO: implement algorithm
-  const allowedToConnectUser = Math.random() < currentIntimacy / 100;
+  // const allowedToConnectUser = Math.random() < currentIntimacy / 100;
+  const allowedToConnectUser = true;
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 

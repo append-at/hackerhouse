@@ -72,7 +72,7 @@ export async function listUserConversations(
   const userConversations = await supabase
     .from('user_conversation')
     .select('*')
-    .or(`user_id.eq.${userId},other_user_id.eq.${userId}`)
+    // .or(`user_id.eq.${userId},other_user_id.eq.${userId}`)
     .throwOnError()
     .then((res) => res.data ?? []);
 

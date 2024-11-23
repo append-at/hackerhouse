@@ -2,6 +2,9 @@ import webpush from 'web-push';
 
 import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
+const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
+const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY!;
+
 interface SendPushProps {
   userIds: string[];
   title: string;
@@ -23,6 +26,13 @@ export async function sendPush({ userIds, title, body, url }: SendPushProps) {
       webpush.sendNotification(
         subscription as unknown as webpush.PushSubscription,
         JSON.stringify({ title, body, url }),
+        {
+          vapidDetails: {
+            subject: 'mailto:team@at.studio',
+            publicKey: vapidPublicKey,
+            privateKey: vapidPrivateKey,
+          },
+        },
       );
     }),
   );

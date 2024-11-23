@@ -7,12 +7,6 @@ import { createAdminSupabase } from '@/lib/db/supabase/admin';
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
 const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY!;
 
-webpush.setVapidDetails(
-  'mailto:team@at.studio',
-  vapidPublicKey,
-  vapidPrivateKey,
-);
-
 export interface SendPushForDailyQuestionProps {
   message: string;
   toTopics: string[];
@@ -47,6 +41,13 @@ export async function sendPushForDailyQuestion({
           title: 'Hacky',
           body: message,
         }),
+        {
+          vapidDetails: {
+            subject: 'mailto:team@at.studio',
+            publicKey: vapidPublicKey,
+            privateKey: vapidPrivateKey,
+          },
+        },
       );
     } catch (err) {
       console.error('Error sending push notification:', err);

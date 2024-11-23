@@ -157,11 +157,12 @@ Call searchForInsight if user has any concern/question/consideration.
         required: ['userId'],
       }),
       execute: async ({ userId, reason }) => {
-        return await connectPeople({
+        await connectPeople({
           userId: user.id,
           otherUserId: userId,
           reason,
         });
+        return 'Connection complete. Please message user that you introduced them.';
       },
     }),
   };
