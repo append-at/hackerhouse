@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import Balancer from 'react-wrap-balancer';
 
 interface MessageBubbleProps {
   content: string;
@@ -19,16 +20,16 @@ export default function ChatMessageBubble({
   className,
 }: MessageBubbleProps) {
   return (
-    <div className={isOutgoing ? 'text-right' : 'text-left'}>
+    <div className={cn('chat-bubble', isOutgoing ? 'text-right' : 'text-left')}>
       <Card
         className={cn(
           'inline-block max-w-xs space-y-2 rounded-xl border-none text-left',
-          isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-3' : 'bg-transparent pl-2 pt-4 font-display',
+          isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-3' : 'bg-transparent pl-2 font-display',
           className,
         )}
       >
         <p className='text-foreground'>
-          {content}
+          <Balancer>{content}</Balancer>
           {isStreaming && <span className='ml-1 inline-block h-4 w-2 animate-pulse bg-zinc-400' />}
         </p>
         {/*{!isOutgoing && (*/}

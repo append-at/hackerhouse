@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 import { type Profile, ProfileSchema } from '../schema';
 import { createUser } from './actions';
+import Balancer from 'react-wrap-balancer';
 
 type Props = {
   user: User;
@@ -61,7 +62,9 @@ const SetupProfile = ({ user }: Props) => {
   return (
     <>
       <header className='w-full text-center'>
-        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>Tell us about yourself</h1>
+        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>
+          <Balancer>Tell us about yourself</Balancer>
+        </h1>
       </header>
 
       <article className='flex w-full grow items-center'>

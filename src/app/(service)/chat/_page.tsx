@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
 import { dayjs } from '@/lib/date';
 import { syncChatConversations } from './actions';
+import { cn } from '@/lib/utils';
+import Balancer from 'react-wrap-balancer';
 
 type Props = {
   sessionId: string;
@@ -43,7 +45,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
 
   return (
     <div className='flex h-full flex-col bg-black text-white'>
-      <div className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'>
+      <div className='flex-1 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'>
         {messages.map((message, index) => {
           const prev = messages[index - 1];
           const shouldShowDivider = !prev || dayjs(prev.createdAt).isBefore(message.createdAt, 'day');
@@ -51,7 +53,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
           return (
             <div
               key={index}
-              className='space-y-6'
+              className={cn(message.content && !message.toolInvocations?.length && 'mb-8')}
             >
               {shouldShowDivider && (
                 <div className='py-3 text-center text-xs text-muted-foreground'>
@@ -59,12 +61,15 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                 </div>
               )}
 
-              <ChatMessageBubble
-                content={message.content ?? ''}
-                sender={message.role === 'user' ? 'You' : 'AI'}
-                isOutgoing={message.role === 'user'}
-                isStreaming={index === messages.length - 1 && isLoading}
-              />
+              {message.content && (
+                <ChatMessageBubble
+                  content={message.content}
+                  sender={message.role === 'user' ? 'You' : 'AI'}
+                  isOutgoing={message.role === 'user'}
+                  isStreaming={index === messages.length - 1 && isLoading}
+                />
+              )}
+
               {message.toolInvocations && message.toolInvocations.length > 0 && (
                 <div className='flex flex-col gap-4'>
                   {message.toolInvocations.map((toolInvocation) => {
@@ -76,8 +81,10 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                             icon={LightbulbIcon}
                             text='Found Insight'
                           />
-                          <Card className='max-w-sm space-y-6 rounded-xl border-none bg-muted px-6 py-5'>
-                            <p className='font-display text-white'>{args.quote}</p>
+                          <Card className='mb-5 inline-block max-w-sm space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12'>
+                            <p className='font-display text-white'>
+                              <Balancer>{args.quote}</Balancer>
+                            </p>
                             <div className='flex items-center gap-2'>
                               <Avatar className='size-4'>
                                 <AvatarImage src={user.avatar_url ?? ''} />

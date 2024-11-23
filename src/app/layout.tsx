@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Provider as WrapProvider } from 'react-wrap-balancer';
 
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -18,8 +19,10 @@ type Props = {
 const Layout = ({ children }: Props) => (
   <html>
     <body className={cn('dark', fonts.literata.variable, fonts.inter.variable, fonts.jetbrainsMono.variable)}>
-      <main className='mx-auto min-h-dvh max-w-md sm:border-x sm:border-solid sm:border-border'>{children}</main>
-      <Toaster />
+      <WrapProvider preferNative={false}>
+        <main className='mx-auto min-h-dvh max-w-md sm:border-x sm:border-solid sm:border-border'>{children}</main>
+        <Toaster />
+      </WrapProvider>
     </body>
   </html>
 );

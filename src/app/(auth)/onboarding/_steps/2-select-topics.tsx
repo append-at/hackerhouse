@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { type Topics, TopicsSchema } from '../schema';
 import { setUserTopics } from './actions';
 import { Spinner } from '@/components/ui/spinner';
+import Balancer from 'react-wrap-balancer';
 
 const SelectTopics = () => {
   const [percent, setPercent] = useState(0);
@@ -50,7 +51,9 @@ const SelectTopics = () => {
   return (
     <>
       <header className='w-full text-center'>
-        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>Choose topics you’re interested in</h1>
+        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>
+          <Balancer>Choose topics you’re interested in</Balancer>
+        </h1>
       </header>
 
       <form
