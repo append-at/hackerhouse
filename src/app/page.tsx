@@ -1,6 +1,7 @@
-import { createServerSupabase } from '@/lib/db/supabase/server';
-import { getCurrentUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
+
+import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 
 const Page = async () => {
   const supabase = await createServerSupabase();

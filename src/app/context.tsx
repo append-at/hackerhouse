@@ -1,7 +1,7 @@
 'use client';
 
-import type { Tables } from '@/database.types';
 import { createContext, useContext } from 'react';
+import type { Tables } from '@/database.types';
 
 type User = Tables<'user'>;
 export const UserContext = createContext<User | null>(null);
@@ -16,6 +16,9 @@ type UserContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const UserContextProvider = ({ value, children }: UserContextProviderProps) => (
+export const UserContextProvider = ({
+  value,
+  children,
+}: UserContextProviderProps) => (
   <UserContext.Provider value={value}>{children}</UserContext.Provider>
 );

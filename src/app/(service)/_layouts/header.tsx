@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
+import { ArrowLeftIcon } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type Props = Omit<React.HTMLProps<HTMLElement>, 'title' | 'path'> & {
   title: React.ReactNode;
@@ -20,10 +21,18 @@ type HeaderWithDepthProps = Props & {
   path: string;
 };
 
-export const HeaderWithDepth = ({ title, path, className, ...props }: HeaderWithDepthProps) => (
+export const HeaderWithDepth = ({
+  title,
+  path,
+  className,
+  ...props
+}: HeaderWithDepthProps) => (
   <header
     {...props}
-    className={cn('pt-safe flex h-12 shrink-0 items-center gap-2.5 px-6', className)}
+    className={cn(
+      'pt-safe flex h-12 shrink-0 items-center gap-2.5 px-6',
+      className,
+    )}
   >
     <Button
       variant='ghost'

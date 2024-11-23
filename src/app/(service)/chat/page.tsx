@@ -1,9 +1,11 @@
+import Logo from '@/assets/logo.module.svg';
+import { generateId } from 'ai';
+
 import { getCurrentUser, listMyAiConversations } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
-import ChatInterface from './_page';
-import { generateId } from 'ai';
+
 import { Header } from '../_layouts/header';
-import Logo from '@/assets/logo.module.svg';
+import ChatInterface from './_page';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -11,7 +13,9 @@ const Page = async () => {
   const conversations = await listMyAiConversations(supabase);
 
   let sessionId: string = '';
-  const initialMessages = conversations.flatMap((conversations) => conversations.data);
+  const initialMessages = conversations.flatMap(
+    (conversations) => conversations.data,
+  );
 
   // if user first message
   if (conversations.length === 0) {
@@ -32,6 +36,8 @@ const Page = async () => {
   } else {
     sessionId = conversations[conversations.length - 1].id;
   }
+
+  console.log('testing', initialMessages);
 
   return (
     <div className='flex h-full flex-col'>

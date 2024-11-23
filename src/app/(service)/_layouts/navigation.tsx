@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CircleUserIcon, SpeechIcon, UsersIcon } from 'lucide-react';
-import { useUser } from '@/app/context';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser } from '@/app/context';
 
 const Navigation = () => {
   const user = useUser();

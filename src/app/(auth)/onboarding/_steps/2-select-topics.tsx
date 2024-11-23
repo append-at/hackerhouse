@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { cn, chunk } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type Topics, TopicsSchema } from '../schema';
-import { setUserTopics } from './actions';
-import { Spinner } from '@/components/ui/spinner';
+import { useForm } from 'react-hook-form';
 import Balancer from 'react-wrap-balancer';
+
+import { chunk, cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+
+import { TopicsSchema, type Topics } from '../schema';
+import { setUserTopics } from './actions';
 
 const SelectTopics = () => {
   const [percent, setPercent] = useState(0);
@@ -96,7 +98,11 @@ const SelectTopics = () => {
           form='form'
           type='submit'
         >
-          {form.formState.isSubmitting ? <Spinner className='!size-5' /> : 'Finish'}
+          {form.formState.isSubmitting ? (
+            <Spinner className='!size-5' />
+          ) : (
+            'Finish'
+          )}
         </Button>
       </div>
     </>
@@ -113,13 +119,16 @@ const ScrollSyncRow = ({ percent, onScroll, children }: ScrollSyncRowProps) => {
   const root = useRef<HTMLDivElement>(null);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollPercentage = e.currentTarget.scrollLeft / (e.currentTarget.scrollWidth - e.currentTarget.clientWidth);
+    const scrollPercentage =
+      e.currentTarget.scrollLeft /
+      (e.currentTarget.scrollWidth - e.currentTarget.clientWidth);
     onScroll(scrollPercentage);
   };
 
   useEffect(() => {
     if (root.current) {
-      const scrollLeft = percent * (root.current.scrollWidth - root.current.clientWidth);
+      const scrollLeft =
+        percent * (root.current.scrollWidth - root.current.clientWidth);
       root.current.scrollLeft = scrollLeft;
     }
   }, [percent]);

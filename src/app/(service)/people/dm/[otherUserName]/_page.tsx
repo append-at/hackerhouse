@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
-import ChatInputArea from '@/components/chat/ChatInputArea';
-import { useUser } from '@/app/context';
-import { dayjs } from '@/lib/date';
 import { Tables } from '@/database.types';
-import sendMessage from '@/app/(service)/people/dm/[otherUserName]/actions';
+
+import { dayjs } from '@/lib/date';
 import { useSupabaseClient } from '@/hooks/use-supabase';
+import ChatInputArea from '@/components/chat/ChatInputArea';
+import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
+import sendMessage from '@/app/(service)/people/dm/[otherUserName]/actions';
+import { useUser } from '@/app/context';
 
 type Props = {
   initialMessages: Tables<'user_message'>[];
@@ -15,7 +16,11 @@ type Props = {
   conversationId: string;
 };
 
-const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props) => {
+const ChatInterface = ({
+  initialMessages,
+  otherUserName,
+  conversationId,
+}: Props) => {
   const chatListRef = useRef<HTMLDivElement>(null);
 
   const supabase = useSupabaseClient();
@@ -31,11 +36,15 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
   useEffect(() => {
     const channelSubscribe = supabase
       .channel('user_message')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_message' }, (payload) => {
-        const newMessage = payload.new as Tables<'user_message'>;
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-        setInputMessage('');
-      })
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'user_message' },
+        (payload) => {
+          const newMessage = payload.new as Tables<'user_message'>;
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
+          setInputMessage('');
+        },
+      )
       .subscribe();
 
     return () => {
@@ -58,7 +67,8 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
       >
         {messages.map((message, index) => {
           const prev = messages[index - 1];
-          const shouldShowDivider = !prev || dayjs(prev.at).isBefore(message.at, 'day');
+          const shouldShowDivider =
+            !prev || dayjs(prev.at).isBefore(message.at, 'day');
 
           return (
             <div

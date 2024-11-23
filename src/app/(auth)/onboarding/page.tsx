@@ -1,11 +1,13 @@
-import { cn } from '@/lib/utils';
+import { redirect } from 'next/navigation';
+import Logo from '@/assets/logo.module.svg';
+
+import { getCurrentUser } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
+import { cn } from '@/lib/utils';
+
 import SetupProfile from './_steps/1-setup-profile';
 import SelectTopics from './_steps/2-select-topics';
 import { OnboardingStep } from './schema';
-import { getCurrentUser } from '@/lib/db/queries';
-import { redirect } from 'next/navigation';
-import Logo from '@/assets/logo.module.svg';
 
 const Page = async () => {
   const supabase = await createServerSupabase();

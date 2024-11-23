@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
-import defaultTheme from 'tailwindcss/defaultTheme';
 import animate from 'tailwindcss-animate';
 import safeArea from 'tailwindcss-safe-area';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
   darkMode: ['class'],

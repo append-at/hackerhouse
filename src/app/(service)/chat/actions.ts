@@ -1,11 +1,15 @@
 'use server';
 
 import { type Json } from '@/database.types';
-import { getCurrentUser } from '@/lib/db/queries';
-import { createServerSupabase } from '@/lib/db/supabase/server';
 import { Message } from 'ai';
 
-export const syncChatConversations = async (chatInstantId: string, data: Message[]) => {
+import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
+
+export const syncChatConversations = async (
+  chatInstantId: string,
+  data: Message[],
+) => {
   const supabase = await createServerSupabase();
   const user = await getCurrentUser(supabase);
 

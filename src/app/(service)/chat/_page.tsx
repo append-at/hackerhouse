@@ -2,17 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useChat } from 'ai/react';
+import {
+  HeartCrackIcon,
+  HeartIcon,
+  LightbulbIcon,
+  LinkIcon,
+  SearchIcon,
+} from 'lucide-react';
+import Balancer from 'react-wrap-balancer';
+
+import { dayjs } from '@/lib/date';
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card } from '@/components/ui/card';
+import ChatInputArea from '@/components/chat/ChatInputArea';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
-import ChatInputArea from '@/components/chat/ChatInputArea';
-import { HeartCrackIcon, HeartIcon, LightbulbIcon, LinkIcon, SearchIcon } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
-import { dayjs } from '@/lib/date';
+
 import { syncChatConversations } from './actions';
-import { cn } from '@/lib/utils';
-import Balancer from 'react-wrap-balancer';
 
 type QuoteCardProps = {
   quote: string;
@@ -51,17 +59,18 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
   const [trigger, setTriggerUpdate] = useState(0);
 
   const user = useUser();
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/chat',
-    initialMessages,
-    onFinish() {
-      // Force update the trigger because the `messages` are not updated
-      setTriggerUpdate((prev) => prev + 1);
-    },
-    body: {
-      sessionId,
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: '/api/chat',
+      initialMessages,
+      onFinish() {
+        // Force update the trigger because the `messages` are not updated
+        setTriggerUpdate((prev) => prev + 1);
+      },
+      body: {
+        sessionId,
+      },
+    });
 
   useEffect(() => {
     chatListRef.current?.scrollTo({
@@ -86,12 +95,15 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
       >
         {messages.map((message, index) => {
           const prev = messages[index - 1];
-          const shouldShowDivider = !prev || dayjs(prev.createdAt).isBefore(message.createdAt, 'day');
+          const shouldShowDivider =
+            !prev || dayjs(prev.createdAt).isBefore(message.createdAt, 'day');
 
           return (
             <div
               key={index}
-              className={cn(message.content && !message.toolInvocations?.length && 'mb-8')}
+              className={cn(
+                message.content && !message.toolInvocations?.length && 'mb-8',
+              )}
             >
               {shouldShowDivider && (
                 <div className='py-3 text-center text-xs text-muted-foreground'>
@@ -108,93 +120,99 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                 />
               )}
 
-              {message.toolInvocations && message.toolInvocations.length > 0 && (
-                <div className='flex w-fit flex-col gap-4'>
-                  {message.toolInvocations.map((toolInvocation) => {
-                    const { toolName, toolCallId, args, state } = toolInvocation;
-                    if (toolName === 'askForSharingInsight') {
-                      return (
-                        <div key={toolCallId}>
-                          <ChatReactionIndicator
-                            icon={SearchIcon}
-                            text='Found Insight'
-                          />
+              {message.toolInvocations &&
+                message.toolInvocations.length > 0 && (
+                  <div className='flex w-fit flex-col gap-4'>
+                    {message.toolInvocations.map((toolInvocation) => {
+                      const { toolName, toolCallId, args, state } =
+                        toolInvocation;
+                      if (toolName === 'askForSharingInsight') {
+                        return (
+                          <div key={toolCallId}>
+                            <ChatReactionIndicator
+                              icon={SearchIcon}
+                              text='Found Insight'
+                            />
+                            <QuoteCard
+                              quote={args.quote}
+                              avatar_url={user.avatar_url || undefined}
+                              username={user.username}
+                            />
+                          </div>
+                        );
+                      } else if (toolName === 'userConfirmedToShareInsight') {
+                        return (
+                          <div key={toolCallId}>
+                            <ChatReactionIndicator
+                              key={toolCallId}
+                              icon={HeartIcon}
+                              text='Friendship Increased'
+                            />
+                          </div>
+                        );
+                      } else if (toolName === 'searchForInsight') {
+                        if (state !== 'result') {
+                          return (
+                            <ChatReactionIndicator
+                              key={toolCallId}
+                              icon={LightbulbIcon}
+                              text='Thinking...'
+                            />
+                          );
+                        }
+                        const { insight } = toolInvocation.result as {
+                          insight: {
+                            id: string;
+                            bio: string;
+                            quote: string;
+                            user_id: string;
+                            username: string;
+                            avatar_url: string;
+                          };
+                        };
+                        return (
                           <QuoteCard
-                            quote={args.quote}
-                            avatar_url={user.avatar_url || undefined}
-                            username={user.username}
+                            key={toolCallId}
+                            quote={insight.quote}
+                            avatar_url={insight.avatar_url}
+                            username={insight.username}
                           />
-                        </div>
-                      );
-                    } else if (toolName === 'userConfirmedToShareInsight') {
-                      return (
-                        <div key={toolCallId}>
-                          <ChatReactionIndicator
-                            icon={HeartIcon}
-                            text='Friendship Increased'
-                          />
-                        </div>
-                      );
-                    } else if (toolName === 'searchForInsight') {
-                      if (state !== 'result') {
+                        );
+                      } else if (toolName === 'increaseIntimacy') {
                         return (
                           <ChatReactionIndicator
                             key={toolCallId}
-                            icon={LightbulbIcon}
-                            text='Thinking...'
+                            icon={HeartIcon}
+                            text='Friendship Increased'
+                          />
+                        );
+                      } else if (toolName === 'decreaseIntimacy') {
+                        return (
+                          <ChatReactionIndicator
+                            key={toolCallId}
+                            icon={HeartCrackIcon}
+                            text='Friendship Decreased'
+                          />
+                        );
+                      } else if (toolName === 'connectPeople') {
+                        return (
+                          <ChatReactionIndicator
+                            key={toolCallId}
+                            icon={LinkIcon}
+                            text='Connected!'
                           />
                         );
                       }
-                      const { insight } = toolInvocation.result as {
-                        insight: {
-                          id: string;
-                          bio: string;
-                          quote: string;
-                          user_id: string;
-                          username: string;
-                          avatar_url: string;
-                        };
-                      };
                       return (
-                        <QuoteCard
+                        <ChatReactionIndicator
                           key={toolCallId}
-                          quote={insight.quote}
-                          avatar_url={insight.avatar_url}
-                          username={insight.username}
+                          icon={LightbulbIcon}
+                          text='Thinking...'
                         />
                       );
-                    } else if (toolName === 'increaseIntimacy') {
-                      return (
-                        <ChatReactionIndicator
-                          icon={HeartIcon}
-                          text='Friendship Increased'
-                        />
-                      );
-                    } else if (toolName === 'decreaseIntimacy') {
-                      return (
-                        <ChatReactionIndicator
-                          icon={HeartCrackIcon}
-                          text='Friendship Decreased'
-                        />
-                      );
-                    } else if (toolName === 'connectPeople') {
-                      return (
-                        <ChatReactionIndicator
-                          icon={LinkIcon}
-                          text='Connected!'
-                        />
-                      );
-                    }
-                    return (
-                      <ChatReactionIndicator
-                        key={toolCallId}
-                        icon={LightbulbIcon}
-                        text='Thinking...'
-                      />
-                    );
-                  })}
-                </div>
-              )}
+                    })}
+                  </div>
+                )}
             </div>
           );
         })}

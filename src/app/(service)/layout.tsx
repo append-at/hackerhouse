@@ -1,7 +1,8 @@
+import { getCurrentUser } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
+
 import { UserContextProvider } from '../context';
 import Navigation from './_layouts/navigation';
-import { getCurrentUser } from '@/lib/db/queries';
 
 type Props = {
   children: React.ReactNode;

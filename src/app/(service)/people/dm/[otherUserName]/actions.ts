@@ -2,7 +2,11 @@
 
 import { createServerSupabase } from '@/lib/db/supabase/server';
 
-export default async function sendMessage(conversationId: string, userId: string, message: string) {
+export default async function sendMessage(
+  conversationId: string,
+  userId: string,
+  message: string,
+) {
   const supabase = await createServerSupabase();
 
   await supabase.from('user_message').insert({

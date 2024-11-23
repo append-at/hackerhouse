@@ -1,12 +1,16 @@
 import { getCurrentIntimacy } from '@/actions/intimacy';
-import { createAdminSupabase } from '@/lib/db/supabase/admin';
-import { CoreMessage, generateText } from 'ai';
 import OpenAI from 'openai';
+
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
 /**
  * Search relevant insights and offer to introduce them to the user.
  */
-export async function peoplexity(userId: string, situation: string, consideration: string) {
+export async function peoplexity(
+  userId: string,
+  situation: string,
+  consideration: string,
+) {
   const supabase = createAdminSupabase();
   const currentIntimacy = await getCurrentIntimacy(userId);
 
@@ -32,7 +36,11 @@ export async function peoplexity(userId: string, situation: string, consideratio
 
   console.log(
     'insights',
-    insights.map((i) => ({ username: i.username, quote: i.quote, similarity: i.similarity })),
+    insights.map((i) => ({
+      username: i.username,
+      quote: i.quote,
+      similarity: i.similarity,
+    })),
   );
 
   const result = await openai.chat.completions.create({
@@ -69,7 +77,10 @@ Insights loaded by RAG vector search: ${JSON.stringify(insights)}`.trim(),
               type: ['object', 'null'],
               properties: {
                 id: { type: 'string' },
-                messageToUser: { type: 'string', description: `Concise response to user.` },
+                messageToUser: {
+                  type: 'string',
+                  description: `Concise response to user.`,
+                },
               },
               required: ['id', 'messageToUser'],
             },

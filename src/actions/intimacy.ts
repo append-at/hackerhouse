@@ -16,7 +16,8 @@ const MIN_VALUE = 0;
 const MAX_VALUE = 100;
 const DAILY_MAX_INCREASE = 3;
 
-const normalizeIntimacy = (intimacy: number) => Math.max(MIN_VALUE, Math.min(MAX_VALUE, intimacy));
+const normalizeIntimacy = (intimacy: number) =>
+  Math.max(MIN_VALUE, Math.min(MAX_VALUE, intimacy));
 
 const DELTA: Record<IntimacyActionType, number> = {
   // 증가 요소 (퍼센트)
@@ -39,14 +40,21 @@ export async function getCurrentIntimacy(userId: string): Promise<number> {
     .order('at', { ascending: true })
     .throwOnError();
 
-  const totalDelta = (data ?? []).reduce((sum, record) => sum + record.delta, INITIAL_VALUE);
+  const totalDelta = (data ?? []).reduce(
+    (sum, record) => sum + record.delta,
+    INITIAL_VALUE,
+  );
   return Math.max(MIN_VALUE, Math.min(MAX_VALUE, totalDelta));
 }
 
 async function getDailyIncrease(userId: string): Promise<number> {
   const supabase = createAdminSupabase();
   const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+  const todayStart = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  ).toISOString();
 
   // 오늘 증가한 총량 계산
   const { data, error } = await supabase
@@ -71,7 +79,9 @@ export async function updateIntimacy(
   const currentIntimacy = await getCurrentIntimacy(userId);
 
   // check delta
-  let newIntimacy = normalizeIntimacy(currentIntimacy * (1 + DELTA[actionType] / 100) ** multiplier);
+  let newIntimacy = normalizeIntimacy(
+    currentIntimacy * (1 + DELTA[actionType] / 100) ** multiplier,
+  );
 
   if (newIntimacy > currentIntimacy) {
     const dailyIncrease = await getDailyIncrease(userId);
@@ -82,7 +92,10 @@ export async function updateIntimacy(
   const delta = newIntimacy - currentIntimacy;
 
   if (delta !== 0) {
-    await supabase.from('ai_intimacy').insert({ user_id: userId, delta, reason }).throwOnError();
+    await supabase
+      .from('ai_intimacy')
+      .insert({ user_id: userId, delta, reason })
+      .throwOnError();
   }
   return newIntimacy;
 }

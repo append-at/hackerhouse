@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+
 import { createServerSupabase } from '@/lib/db/supabase/server';
 
 export async function GET(request: Request) {

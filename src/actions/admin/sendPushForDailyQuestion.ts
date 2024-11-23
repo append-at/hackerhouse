@@ -1,26 +1,37 @@
 'use server';
 
-import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import webpush from 'web-push';
+
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
 const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY!;
 
-webpush.setVapidDetails('mailto:team@at.studio', vapidPublicKey, vapidPrivateKey);
+webpush.setVapidDetails(
+  'mailto:team@at.studio',
+  vapidPublicKey,
+  vapidPrivateKey,
+);
 
 export interface SendPushForDailyQuestionProps {
   message: string;
   toTopics: string[];
 }
 
-export async function sendPushForDailyQuestion({ message, toTopics }: SendPushForDailyQuestionProps) {
+export async function sendPushForDailyQuestion({
+  message,
+  toTopics,
+}: SendPushForDailyQuestionProps) {
   const supabase = createAdminSupabase();
 
   // Get users and their subscriptions while creating AI conversations
-  const { data: subscriptions, error } = await supabase.rpc('send_push_for_daily_question', {
-    to_topics: toTopics,
-    message,
-  });
+  const { data: subscriptions, error } = await supabase.rpc(
+    'send_push_for_daily_question',
+    {
+      to_topics: toTopics,
+      message,
+    },
+  );
 
   if (error) {
     console.error('Error sending push notifications:', error);
