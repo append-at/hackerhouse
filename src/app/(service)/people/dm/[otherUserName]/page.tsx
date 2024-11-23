@@ -31,7 +31,7 @@ const Page = async ({ params }: PageProps) => {
   const messages = await listUserConversationMessages(supabase, currentUserConversation.id);
 
   return (
-    <>
+    <div className='flex h-full flex-col'>
       <HeaderWithDepth
         path='/people'
         title={otherUser?.name ?? ''}
@@ -39,7 +39,7 @@ const Page = async ({ params }: PageProps) => {
 
       <Tabs
         defaultValue='conversations'
-        className='w-full'
+        className='flex min-h-0 w-full grow flex-col'
       >
         <div className='px-6 py-2'>
           <TabsList className='w-full'>
@@ -58,7 +58,7 @@ const Page = async ({ params }: PageProps) => {
           </TabsList>
         </div>
         <TabsContent
-          className='h-[calc(100dvh-110px)]'
+          className='!mt-0 min-h-0 grow'
           value='conversations'
         >
           <ChatInterface
@@ -67,11 +67,14 @@ const Page = async ({ params }: PageProps) => {
             conversationId={currentUserConversation.id}
           />
         </TabsContent>
-        <TabsContent value='profile'>
+        <TabsContent
+          className='!mt-0 min-h-0 grow'
+          value='profile'
+        >
           <ProfileInterface user={otherUser!} />
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 
