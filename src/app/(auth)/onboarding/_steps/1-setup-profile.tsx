@@ -32,6 +32,7 @@ const SetupProfile = () => {
       <article className='flex w-full grow items-center'>
         <Form {...form}>
           <form
+            id='form'
             className='w-full space-y-6 px-6'
             onSubmit={form.handleSubmit(handleSubmit)}
           >
@@ -86,19 +87,20 @@ const SetupProfile = () => {
                 </FormItem>
               )}
             />
-
-            <div className='fixed bottom-20 left-0 w-full text-center shadow-lg'>
-              <Button
-                className='h-12 w-64 rounded-xl text-base'
-                type='submit'
-                disabled={isDisabled}
-              >
-                Next
-              </Button>
-            </div>
           </form>
         </Form>
       </article>
+
+      <div className='fixed bottom-20 left-0 w-full text-center shadow-lg'>
+        <Button
+          className='h-12 w-64 rounded-xl text-base'
+          form='form'
+          type='submit'
+          disabled={isDisabled}
+        >
+          Next
+        </Button>
+      </div>
     </>
   );
 };

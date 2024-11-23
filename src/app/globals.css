@@ -77,10 +77,6 @@ textarea {
   @apply font-sans text-foreground antialiased;
 }
 
-.font-display {
-  font-variation-settings: 'opsz' 72 !important;
-}
-
 /* Customized Typography */
 .text-xs {
   font-variation-settings: normal;

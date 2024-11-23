@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
-import { Heart, MessageSquare } from 'lucide-react';
+import { Heart, LightbulbIcon, MessageSquare } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
@@ -49,7 +49,7 @@ export default function ChatPage() {
               {hasQuote && (
                 <>
                   <ChatReactionIndicator
-                    icon={MessageSquare}
+                    icon={LightbulbIcon}
                     text='Found Insight'
                   />
                   <Card className='max-w-[80%] space-y-2 border-none bg-zinc-800/50 p-3'>

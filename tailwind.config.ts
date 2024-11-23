@@ -11,12 +11,7 @@ export default {
   ],
   theme: {
     fontFamily: {
-      display: [
-        ['var(--font-literata)'],
-        {
-          fontVariationSettings: '"opsz" 60',
-        },
-      ],
+      display: ['var(--font-literata)'],
       sans: [
         ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
         {

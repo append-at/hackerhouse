@@ -21,12 +21,12 @@ export default function ChatMessageBubble({
   return (
     <Card
       className={cn(
-        'max-w-[80%] space-y-2 border-none p-3',
-        isOutgoing ? 'ml-auto bg-zinc-800' : 'bg-transparent',
+        'max-w-xs space-y-2 border-none',
+        isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-4' : 'bg-transparent pl-2 pt-4 font-display',
         className,
       )}
     >
-      <p className='text-white'>
+      <p className='text-foreground'>
         {content}
         {isStreaming && <span className='ml-1 inline-block h-4 w-2 animate-pulse bg-zinc-400' />}
       </p>
