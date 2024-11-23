@@ -12,13 +12,13 @@ import { Spinner } from '@/components/ui/spinner';
 import { Header } from '../_layouts/header';
 
 const Page = async () => (
-  <>
+  <div className='flex flex-col h-full'>
     <Header title='Connections' />
 
     <Suspense fallback={<ProfileFallback />}>
       <ProfileList />
     </Suspense>
-  </>
+  </div>
 );
 
 const ProfileList = async () => {
@@ -33,7 +33,7 @@ const ProfileList = async () => {
   );
   const profileMap = await getUserProfiles(userIds);
 
-  return conversations.length === 0 ? (
+  return conversations.length > 0 ? (
     <ul>
       {conversations.map((item) => {
         const counterpartUserId =
@@ -65,7 +65,7 @@ const ProfileList = async () => {
                   </span>
                 </div>
 
-                <p className='text-sm text-muted-foreground'>
+                <p className='text-sm text-muted-foreground line-clamp-2'>
                   {'latest_message' in item
                     ? (item.latest_message as string)
                     : 'No messages yet'}
