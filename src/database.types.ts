@@ -127,12 +127,42 @@ export type Database = {
           },
         ];
       };
+      push_subscription: {
+        Row: {
+          created_at: string;
+          id: string;
+          subscription: Json;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          subscription: Json;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          subscription?: Json;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "push_subscription_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       user: {
         Row: {
           avatar_url: string | null;
           bio: string | null;
           created_at: string;
           id: string;
+          topics: string[] | null;
           username: string;
         };
         Insert: {
@@ -140,6 +170,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           id: string;
+          topics?: string[] | null;
           username: string;
         };
         Update: {
@@ -147,6 +178,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           id?: string;
+          topics?: string[] | null;
           username?: string;
         };
         Relationships: [];
@@ -234,7 +266,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      send_push_for_daily_question: {
+        Args: {
+          to_topics: string[];
+          message: string;
+        };
+        Returns: {
+          user_id: string;
+          username: string;
+          subscription: Json;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
@@ -252,29 +294,25 @@ export type Tables<
     | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (
-      & Database[PublicTableNameOrOptions["schema"]]["Tables"]
-      & Database[PublicTableNameOrOptions["schema"]]["Views"]
-    )
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database } ? (
-    & Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    & Database[PublicTableNameOrOptions["schema"]]["Views"]
-  )[TableName] extends {
-    Row: infer R;
-  } ? R
-  : never
-  : PublicTableNameOrOptions extends keyof (
-    & PublicSchema["Tables"]
-    & PublicSchema["Views"]
-  ) ? (
-      & PublicSchema["Tables"]
-      & PublicSchema["Views"]
-    )[PublicTableNameOrOptions] extends {
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R;
-    } ? R
+    }
+    ? R
     : never
-  : never;
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -285,15 +323,17 @@ export type TablesInsert<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-    Insert: infer I;
-  } ? I
-  : never
+      Insert: infer I;
+    }
+    ? I
+    : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I;
-    } ? I
-    : never
-  : never;
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -304,15 +344,17 @@ export type TablesUpdate<
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-    Update: infer U;
-  } ? U
-  : never
+      Update: infer U;
+    }
+    ? U
+    : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U;
-    } ? U
-    : never
-  : never;
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -325,7 +367,7 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-  : never;
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
@@ -334,15 +376,10 @@ export type CompositeTypes<
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database;
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
-      "CompositeTypes"
-    ]
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][
-    CompositeTypeName
-  ]
-  : PublicCompositeTypeNameOrOptions extends
-    keyof PublicSchema["CompositeTypes"]
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-  : never;
+    : never;
