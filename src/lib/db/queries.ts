@@ -3,6 +3,12 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 type MySupabaseClient = SupabaseClient<Database>;
 
+export async function getPublicUser(supabase: MySupabaseClient, filter: Partial<Tables<'user'>>) {
+  const { data } = await supabase.from('user').select('*').match(filter).limit(1).maybeSingle().throwOnError();
+
+  return data;
+}
+
 export async function getCurrentUser(supabase: MySupabaseClient): Promise<Tables<'user'>> {
   const {
     data: { user },
@@ -58,6 +64,16 @@ export async function listUserConversations(supabase: MySupabaseClient): Promise
       return { ...conversation, latest_message: latestMessage?.message };
     }),
   );
+}
+
+export async function listUserConversationMessages(supabase: MySupabaseClient, conversationId: string) {
+  return supabase
+    .from('user_message')
+    .select('*')
+    .eq('conversation_id', conversationId)
+    .order('at', { ascending: true })
+    .throwOnError()
+    .then((res) => res.data ?? []);
 }
 
 export async function getAiConversation(
