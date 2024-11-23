@@ -2,6 +2,8 @@
 
 This is a project for Supabase x YC AI Hackathon 2024.
 
+[Demo](https://hackerhouse-ten.vercel.app)
+
 ## Getting Started
 
 ### Install dependencies
