@@ -1,11 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn, chunk } from '@/lib/utils';
 
 const SelectTopics = () => {
   const [topics, setTopics] = useState(new Set<string>());
+  const [percent, setPercent] = useState(0);
 
   const handleToggle = (topic: string) => () => {
     const set = new Set(topics);
@@ -19,6 +20,10 @@ const SelectTopics = () => {
     setTopics(set);
   };
 
+  const handleScroll = (i: number) => (nextPercent: number) => {
+    setPercent(nextPercent);
+  };
+
   const handleSubmit = async () => {};
 
   return (
@@ -27,33 +32,32 @@ const SelectTopics = () => {
         <h1 className='mx-auto max-w-sm text-3xl font-semibold'>Choose topics you’re interested in</h1>
       </header>
 
-      <article className='flex w-full grow items-center overflow-auto whitespace-nowrap px-6'>
-        <div className='*:mb-3'>
-          {chunk(TOPICS, 3).map((row, i) => (
-            <div
-              key={i}
-              className='whitespace-nowrap'
-            >
-              {row.map((topic) => (
-                <button
-                  key={topic.name}
-                  data-active={topics.has(topic.name)}
-                  className={cn(
-                    'inline-flex h-10 shrink-0 items-center justify-center gap-x-3 rounded-full border border-solid border-secondary px-5 shadow-sm',
-                    '[&+&]:ml-2',
-                    'bg-primary-foreground text-foreground',
-                    'data-[active="true"]:bg-foreground data-[active="true"]:text-primary-foreground',
-                    'transition-all',
-                  )}
-                  onClick={handleToggle(topic.name)}
-                >
-                  <span>{topic.emoji}</span>
-                  <span>{topic.name}</span>
-                </button>
-              ))}
-            </div>
-          ))}
-        </div>
+      <article className='flex w-full grow flex-col justify-center gap-3'>
+        {chunk(TOPICS, 3).map((row, i) => (
+          <ScrollSyncRow
+            percent={percent}
+            key={i}
+            onScroll={handleScroll(i)}
+          >
+            {row.map((topic) => (
+              <button
+                key={topic.name}
+                data-active={topics.has(topic.name)}
+                className={cn(
+                  'inline-flex h-10 shrink-0 items-center justify-center gap-x-3 rounded-full border border-solid border-secondary px-5 shadow-sm',
+                  '[&+&]:ml-2',
+                  'bg-primary-foreground text-foreground',
+                  'data-[active="true"]:bg-foreground data-[active="true"]:text-primary-foreground',
+                  'transition-all',
+                )}
+                onClick={handleToggle(topic.name)}
+              >
+                <span>{topic.emoji}</span>
+                <span>{topic.name}</span>
+              </button>
+            ))}
+          </ScrollSyncRow>
+        ))}
       </article>
 
       <div className='fixed bottom-20 left-0 w-full text-center shadow-lg'>
@@ -62,10 +66,44 @@ const SelectTopics = () => {
           disabled={!topics.size}
           onSubmit={handleSubmit}
         >
-          Start
+          Finish
         </Button>
       </div>
     </>
+  );
+};
+
+type ScrollSyncRowProps = {
+  percent: number;
+  onScroll: (percent: number) => void;
+  children: React.ReactNode;
+};
+
+const ScrollSyncRow = ({ percent, onScroll, children }: ScrollSyncRowProps) => {
+  const root = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollPercentage = e.currentTarget.scrollLeft / (e.currentTarget.scrollWidth - e.currentTarget.clientWidth);
+    onScroll(scrollPercentage);
+  };
+
+  useEffect(() => {
+    if (root.current) {
+      const scrollLeft = percent * (root.current.scrollWidth - root.current.clientWidth);
+      root.current.scrollLeft = scrollLeft;
+    }
+  }, [percent]);
+
+  return (
+    <div className='w-full overflow-hidden px-6'>
+      <div
+        ref={root}
+        className='hide-scrollbar overflow-auto whitespace-nowrap'
+        onScroll={handleScroll}
+      >
+        {children}
+      </div>
+    </div>
   );
 };
 
