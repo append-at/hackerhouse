@@ -20,3 +20,11 @@ CREATE POLICY "Considerations are updatable by the user" ON consideration FOR UP
 CREATE POLICY "Considerations are deletable by the user" ON consideration FOR DELETE to authenticated USING (user_id = auth.uid());
 
 CREATE INDEX ON consideration (user_id);
+
+CREATE POLICY "Insights are insertable by the user" ON insight FOR INSERT to authenticated WITH CHECK (user_id = auth.uid());
+CREATE POLICY "Insights are updatable by the user" ON insight FOR UPDATE to authenticated USING (user_id = auth.uid());
+CREATE POLICY "Insights are deletable by the user" ON insight FOR DELETE to authenticated USING (user_id = auth.uid());
+
+CREATE POLICY "Intimacy are insertable by the user" ON ai_intimacy FOR INSERT to authenticated WITH CHECK (user_id = auth.uid());
+
+ALTER TABLE ai_intimacy ALTER COLUMN delta TYPE NUMERIC;
