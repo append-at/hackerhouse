@@ -12,8 +12,10 @@
     "generate:supabase": "supabase gen types typescript --linked > src/database.types.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.4",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.1",
+    "ai": "^4.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",
