@@ -13,7 +13,7 @@ const Layout = async ({ children }: Props) => {
 
   return (
     <UserContextProvider value={user}>
-      <div className='flex h-dvh flex-col'>
+      <div className='flex h-dvh flex-col overflow-hidden'>
         <div className='min-h-0 grow'>{children}</div>
         <Navigation />
       </div>
