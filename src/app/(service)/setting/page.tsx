@@ -1,13 +1,15 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
+import { LogOutIcon, UserIcon } from 'lucide-react';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { useUser } from '@/app/context';
+
 import { Header } from '../_layouts/header';
 import { signOut } from './actions';
 import SubscribePushNotificationButton from './subscribe-notification';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '@/app/context';
 
 const Page = () => {
   const user = useUser();

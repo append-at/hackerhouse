@@ -2,10 +2,11 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-
 import Logo from '@/assets/logo.module.svg';
 
-const ContinueWithGitHub = dynamic(() => import('./continue-with-github'), { ssr: false });
+const ContinueWithGitHub = dynamic(() => import('./continue-with-github'), {
+  ssr: false,
+});
 
 const Page = () => {
   return (
@@ -14,7 +15,9 @@ const Page = () => {
         <h1 className='font-display mb-2 text-5xl font-extrabold tracking-tighter'>
           <Logo className='mx-auto h-10 w-auto' />
         </h1>
-        <p className='text-base text-foreground/60'>Make one AI friend to get a million friends</p>
+        <p className='text-base text-foreground/60'>
+          Make one AI friend to get a million friends
+        </p>
       </div>
 
       <Suspense>

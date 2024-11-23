@@ -1,6 +1,7 @@
+import { Tables } from '@/database.types';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
-import { Tables } from '@/database.types';
 
 type Props = {
   user: Tables<'user'>;
@@ -18,7 +19,9 @@ const ProfileInterface = ({ user }: Props) => (
 
     <div>
       <Label>Bio</Label>
-      <p className='whitespace-pre-line text-sm text-foreground/80'>{user.bio}</p>
+      <p className='whitespace-pre-line text-sm text-foreground/80'>
+        {user.bio}
+      </p>
     </div>
   </section>
 );

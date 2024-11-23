@@ -3,14 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CircleUserIcon, SpeechIcon, UsersIcon } from 'lucide-react';
-import { useUser } from '@/app/context';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser } from '@/app/context';
 
 const Navigation = () => {
   const user = useUser();
 
   return (
-    <nav className='pb-safe shrink-0 text-center'>
+    <nav className='pb-2 shrink-0 text-center'>
       <NavigationItem path='/chat'>
         <SpeechIcon className='size-7' />
       </NavigationItem>

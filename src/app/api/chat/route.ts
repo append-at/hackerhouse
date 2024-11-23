@@ -1,8 +1,9 @@
 import { aiChatAgent } from '@/agents/ai-chat';
-import { getCurrentUser } from '@/lib/db/queries';
-import { createServerSupabase } from '@/lib/db/supabase/server';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
+
+import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 
 export const runtime = 'nodejs';
 

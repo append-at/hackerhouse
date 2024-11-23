@@ -1,26 +1,39 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import type { User } from '@supabase/supabase-js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { Spinner } from '@/components/ui/spinner';
-import { type Profile, ProfileSchema } from '../schema';
-import { createUser } from './actions';
+import type { User } from '@supabase/supabase-js';
+import { useForm } from 'react-hook-form';
 import Balancer from 'react-wrap-balancer';
+
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
+
+import { ProfileSchema, type Profile } from '../schema';
+import { createUser } from './actions';
 
 type Props = {
   user: User;
 };
 
 const getDefaultValues = (user: User): Profile => {
-  const names = `${user.user_metadata.full_name || ''}`.split(' ').filter(Boolean);
-  const username = user.user_metadata.preferred_username || user.user_metadata.user_name;
+  const names = `${user.user_metadata.full_name || ''}`
+    .split(' ')
+    .filter(Boolean);
+  const username =
+    user.user_metadata.preferred_username || user.user_metadata.user_name;
   const avatarUrl = user.user_metadata.avatar_url;
 
   return {
@@ -57,7 +70,9 @@ const SetupProfile = ({ user }: Props) => {
     }
   };
 
-  const isDisabled = form.formState.isSubmitting || Object.keys(form.formState.errors).length > 0;
+  const isDisabled =
+    form.formState.isSubmitting ||
+    Object.keys(form.formState.errors).length > 0;
 
   return (
     <>
@@ -136,7 +151,11 @@ const SetupProfile = ({ user }: Props) => {
           type='submit'
           disabled={isDisabled}
         >
-          {form.formState.isSubmitting ? <Spinner className='!size-5' /> : 'Next'}
+          {form.formState.isSubmitting ? (
+            <Spinner className='!size-5' />
+          ) : (
+            'Next'
+          )}
         </Button>
       </div>
     </>

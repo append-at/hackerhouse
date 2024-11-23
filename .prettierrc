@@ -1,10 +1,32 @@
 {
+  "endOfLine": "lf",
   "semi": true,
-  "trailingComma": "all",
   "singleQuote": true,
   "jsxSingleQuote": true,
   "singleAttributePerLine": true,
-  "printWidth": 120,
   "tabWidth": 2,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "trailingComma": "all",
+  "importOrder": [
+    "^(react/(.*)$)|^(react$)",
+    "^(next/(.*)$)|^(next$)",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^types$",
+    "^@/types/(.*)$",
+    "^@/config/(.*)$",
+    "^@/lib/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/components/ui/(.*)$",
+    "^@/components/(.*)$",
+    "^@/registry/(.*)$",
+    "^@/styles/(.*)$",
+    "^@/app/(.*)$",
+    "",
+    "^[./]"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@ianvs/prettier-plugin-sort-imports"
+  ]
 }

@@ -2,8 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { Button } from '@/components/ui/button';
 import { useSupabaseClient } from '@/hooks/use-supabase';
+import { Button } from '@/components/ui/button';
 
 import GitHubIcon from './assets/github.module.svg';
 

@@ -1,7 +1,8 @@
 'use server';
 
-import { createServerSupabase } from '@/lib/db/supabase/server';
 import OpenAI from 'openai';
+
+import { createServerSupabase } from '@/lib/db/supabase/server';
 
 export async function createInsight(userId: string, quote: string) {
   const supabase = await createServerSupabase();

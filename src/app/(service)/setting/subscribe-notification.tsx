@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { registerPushNotification } from '@/utils/webPush';
+import { BellIcon } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { BellIcon } from 'lucide-react';
 
 /**
  * Asks the user to subscribe to push notifications.

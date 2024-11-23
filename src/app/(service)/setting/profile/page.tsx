@@ -1,19 +1,29 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { Header, HeaderWithDepth } from '../../_layouts/header';
-import { Profile, ProfileSchema } from './schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useUser } from '@/app/context';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { Spinner } from '@/components/ui/spinner';
-import { updateProfile } from './actions';
+import { useForm } from 'react-hook-form';
+
 import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
+import { useUser } from '@/app/context';
+
+import { Header, HeaderWithDepth } from '../../_layouts/header';
+import { updateProfile } from './actions';
+import { Profile, ProfileSchema } from './schema';
 
 const Page = () => {
   const user = useUser();
@@ -41,7 +51,9 @@ const Page = () => {
     }
   };
 
-  const isDisabled = form.formState.isSubmitting || Object.keys(form.formState.errors).length > 0;
+  const isDisabled =
+    form.formState.isSubmitting ||
+    Object.keys(form.formState.errors).length > 0;
 
   return (
     <>
@@ -107,7 +119,11 @@ const Page = () => {
                 type='submit'
                 disabled={isDisabled}
               >
-                {form.formState.isSubmitting ? <Spinner className='!size-5' /> : 'Submit'}
+                {form.formState.isSubmitting ? (
+                  <Spinner className='!size-5' />
+                ) : (
+                  'Submit'
+                )}
               </Button>
             )}
           </form>

@@ -160,7 +160,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                           <ChatReactionIndicator
                             key={toolCallId}
                             icon={LightbulbIcon}
-                            text='Thought for seconds'
+                            text='Thought for a few seconds'
                           />
                         );
                       }

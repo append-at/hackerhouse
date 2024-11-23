@@ -1,8 +1,9 @@
 'use server';
 
-import { createServerSupabase } from '@/lib/db/supabase/server';
-import { type Profile } from '../schema';
 import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
+
+import { type Profile } from '../schema';
 
 export const createUser = async (profile: Profile) => {
   const supabase = await createServerSupabase();
@@ -25,5 +26,9 @@ export const setUserTopics = async (topics: string[]) => {
   const supabase = await createServerSupabase();
   const user = await getCurrentUser(supabase);
 
-  await supabase.from('user').update({ topics }).eq('id', user.id).throwOnError();
+  await supabase
+    .from('user')
+    .update({ topics })
+    .eq('id', user.id)
+    .throwOnError();
 };

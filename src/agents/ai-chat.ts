@@ -1,16 +1,21 @@
+import { connectPeople } from '@/actions/conversation/connectPeople';
 import { createInsight } from '@/actions/insights';
 import { getCurrentIntimacy, updateIntimacy } from '@/actions/intimacy';
 import { Tables } from '@/database.types';
 import { jsonSchema, Message, tool } from 'ai';
+
 import { peoplexity } from './peoplexity';
-import { connectPeople } from '@/actions/conversation/connectPeople';
 
 export async function aiChatAgent(user: Tables<'user'>, messages: Message[]) {
   const intimacy = await getCurrentIntimacy(user.id);
   const lastMessages = JSON.stringify(messages.slice(-3));
   const askedForInsight = lastMessages.includes('askForSharingInsight');
-  const confirmedToShareInsight = lastMessages.includes('userConfirmedToShareInsight');
-  const allowedToConnectUser = lastMessages.includes('"allowedToConnectUser":true');
+  const confirmedToShareInsight = lastMessages.includes(
+    'userConfirmedToShareInsight',
+  );
+  const allowedToConnectUser = lastMessages.includes(
+    '"allowedToConnectUser":true',
+  );
 
   const system = `You're Hecky, the friend of ${user.username}.
 User Profile: ${JSON.stringify(user)}
@@ -66,7 +71,11 @@ Call searchForInsight if user has any concern/question/consideration.
       }),
       execute: async ({ quote }) => {
         const insight = await createInsight(user.id, quote);
-        await updateIntimacy(user.id, 'NEW_INSIGHT', `User shared insight: ${insight!.quote}`);
+        await updateIntimacy(
+          user.id,
+          'NEW_INSIGHT',
+          `User shared insight: ${insight!.quote}`,
+        );
         return 'Share insight complete! Thank you for sharing the insight. Very helpful! Friendship increased!';
       },
     }),
@@ -86,11 +95,20 @@ Call searchForInsight if user has any concern/question/consideration.
     }),
     increaseIntimacy: tool({
       description: 'Use this tool to increase intimacy',
-      parameters: jsonSchema<{ type: 'GOOD_CONVERSATION' | 'DEEP_CONVERSATION'; reason: string }>({
+      parameters: jsonSchema<{
+        type: 'GOOD_CONVERSATION' | 'DEEP_CONVERSATION';
+        reason: string;
+      }>({
         type: 'object',
         properties: {
-          type: { type: 'string', enum: ['GOOD_CONVERSATION', 'DEEP_CONVERSATION'] },
-          reason: { type: 'string', description: 'Reason for increasing intimacy' },
+          type: {
+            type: 'string',
+            enum: ['GOOD_CONVERSATION', 'DEEP_CONVERSATION'],
+          },
+          reason: {
+            type: 'string',
+            description: 'Reason for increasing intimacy',
+          },
         },
         required: ['type', 'reason'],
       }),
@@ -101,11 +119,17 @@ Call searchForInsight if user has any concern/question/consideration.
     }),
     decreaseIntimacy: tool({
       description: 'Use this tool to decrease intimacy',
-      parameters: jsonSchema<{ type: 'OFFENDED' | 'BAD_CONVERSATION'; reason: string }>({
+      parameters: jsonSchema<{
+        type: 'OFFENDED' | 'BAD_CONVERSATION';
+        reason: string;
+      }>({
         type: 'object',
         properties: {
           type: { type: 'string', enum: ['OFFENDED', 'BAD_CONVERSATION'] },
-          reason: { type: 'string', description: 'Reason for decreasing intimacy' },
+          reason: {
+            type: 'string',
+            description: 'Reason for decreasing intimacy',
+          },
         },
         required: ['type', 'reason'],
       }),
@@ -119,16 +143,25 @@ Call searchForInsight if user has any concern/question/consideration.
       parameters: jsonSchema<{ userId: string; reason: string }>({
         type: 'object',
         properties: {
-          userId: { type: 'string', description: 'UUID of the user who gave the insight. Otherwise will be rejected' },
+          userId: {
+            type: 'string',
+            description:
+              'UUID of the user who gave the insight. Otherwise will be rejected',
+          },
           reason: {
             type: 'string',
-            description: 'Reason for connection (will be shown to the user. should look authentic and interesting)',
+            description:
+              'Reason for connection (will be shown to the user. should look authentic and interesting)',
           },
         },
         required: ['userId'],
       }),
       execute: async ({ userId, reason }) => {
-        return await connectPeople({ userId: user.id, otherUserId: userId, reason });
+        return await connectPeople({
+          userId: user.id,
+          otherUserId: userId,
+          reason,
+        });
       },
     }),
   };

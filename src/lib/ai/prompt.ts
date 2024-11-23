@@ -1,6 +1,8 @@
-import { Tables } from "@/database.types";
+import { Tables } from '@/database.types';
 
-export const commonPrompt = (user: Tables<'user'>) => `You're Hecky, the friend of ${user.username}.
+export const commonPrompt = (
+  user: Tables<'user'>,
+) => `You're Hecky, the friend of ${user.username}.
 User Profile: ${JSON.stringify(user)}
 
 Rules:

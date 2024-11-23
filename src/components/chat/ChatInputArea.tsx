@@ -1,7 +1,8 @@
+import React from 'react';
+import { ArrowRightIcon, Heart, MessageSquare, Send } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send, MessageSquare, Heart, ArrowRightIcon } from 'lucide-react';
-import React from 'react';
 
 interface InputAreaProps {
   value: string;
@@ -9,7 +10,11 @@ interface InputAreaProps {
   onReaction: (reaction: string) => void;
 }
 
-export default function ChatInputArea({ value, onChange, onReaction }: InputAreaProps) {
+export default function ChatInputArea({
+  value,
+  onChange,
+  onReaction,
+}: InputAreaProps) {
   return (
     <div className='px-6 py-3'>
       <div className='flex items-center gap-3'>

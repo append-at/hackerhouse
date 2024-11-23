@@ -1,11 +1,13 @@
 'use server';
 
-import { createAdminSupabase } from '@/lib/db/supabase/admin';
-import { sendPush } from '../admin/push';
-import OpenAI from 'openai';
-import { createUserConversation } from '@/lib/db/queries';
 import { Tables } from '@/database.types';
 import { SupabaseClient } from '@supabase/supabase-js';
+import OpenAI from 'openai';
+
+import { createUserConversation } from '@/lib/db/queries';
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
+
+import { sendPush } from '../admin/push';
 import { getCurrentIntimacy } from '../intimacy';
 
 interface SendMessageToConversationProps {
@@ -51,14 +53,29 @@ export interface ConnectPeopleProps {
   reason: string;
 }
 
-export async function connectPeople({ userId, otherUserId, reason }: ConnectPeopleProps): Promise<void> {
+export async function connectPeople({
+  userId,
+  otherUserId,
+  reason,
+}: ConnectPeopleProps): Promise<void> {
   const supabase = createAdminSupabase();
   const openai = new OpenAI();
 
-  const conversation = await createUserConversation(supabase, { user_id: userId, other_user_id: otherUserId });
+  const conversation = await createUserConversation(supabase, {
+    user_id: userId,
+    other_user_id: otherUserId,
+  });
 
-  const { data: user } = await supabase.from('user').select('username, bio').eq('id', otherUserId).maybeSingle();
-  const { data: otherUser } = await supabase.from('user').select('username, bio').eq('id', userId).maybeSingle();
+  const { data: user } = await supabase
+    .from('user')
+    .select('username, bio')
+    .eq('id', otherUserId)
+    .maybeSingle();
+  const { data: otherUser } = await supabase
+    .from('user')
+    .select('username, bio')
+    .eq('id', userId)
+    .maybeSingle();
 
   if (!user || !otherUser) {
     throw new Error('User not found');

@@ -1,9 +1,16 @@
-import { getCurrentUser, getPublicUser, listUserConversationMessages, listUserConversations } from '@/lib/db/queries';
-import { createServerSupabase } from '@/lib/db/supabase/server';
 import { redirect } from 'next/navigation';
-import ChatInterface from '@/app/(service)/people/dm/[otherUserName]/_page';
-import { HeaderWithDepth } from '@/app/(service)/_layouts/header';
+
+import {
+  getCurrentUser,
+  getPublicUser,
+  listUserConversationMessages,
+  listUserConversations,
+} from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { HeaderWithDepth } from '@/app/(service)/_layouts/header';
+import ChatInterface from '@/app/(service)/people/dm/[otherUserName]/_page';
+
 import ProfileInterface from './_profile';
 
 interface PageProps {
@@ -24,15 +31,20 @@ const Page = async ({ params }: PageProps) => {
   const conversations = await listUserConversations(supabase);
   const currentUserConversation = conversations.find(
     (conversation) =>
-      (conversation.other_user_id === otherUser?.id && conversation.user_id === user.id) ||
-      (conversation.other_user_id === user?.id && conversation.user_id === otherUser?.id),
+      (conversation.other_user_id === otherUser?.id &&
+        conversation.user_id === user.id) ||
+      (conversation.other_user_id === user?.id &&
+        conversation.user_id === otherUser?.id),
   );
 
   if (!currentUserConversation) {
     redirect('/people');
   }
 
-  const messages = await listUserConversationMessages(supabase, currentUserConversation.id);
+  const messages = await listUserConversationMessages(
+    supabase,
+    currentUserConversation.id,
+  );
 
   return (
     <div className='flex h-full flex-col'>
