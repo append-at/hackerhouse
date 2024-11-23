@@ -6,7 +6,7 @@ import { jsonSchema, streamText, tool } from 'ai';
 import { updateIntimacy } from '@/actions/intimacy';
 import { isIntroductionAvailable } from '@/actions/conversation/connectPeople';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
