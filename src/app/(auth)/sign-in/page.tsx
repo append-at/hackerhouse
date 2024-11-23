@@ -11,10 +11,10 @@ const Page = () => {
   return (
     <section className='flex h-dvh flex-col items-center justify-center text-center'>
       <div className='mb-20'>
-        <h1 className='mb-2 font-display text-5xl font-extrabold tracking-tighter'>
+        <h1 className='font-display mb-2 text-5xl font-extrabold tracking-tighter'>
           <Logo className='mx-auto h-10 w-auto' />
         </h1>
-        <p className='text-base text-foreground/60'>Make one AI friend to get million friends</p>
+        <p className='text-base text-foreground/60'>Make one AI friend to get a million friends</p>
       </div>
 
       <Suspense>

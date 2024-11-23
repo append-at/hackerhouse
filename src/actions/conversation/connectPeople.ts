@@ -57,8 +57,8 @@ export async function connectPeople({ userId, otherUserId, reason }: ConnectPeop
 
   const conversation = await createUserConversation(supabase, { user_id: userId, other_user_id: otherUserId });
 
-  const { data: user } = await supabase.from('user').select('username').eq('id', otherUserId).maybeSingle();
-  const { data: otherUser } = await supabase.from('user').select('username').eq('id', userId).maybeSingle();
+  const { data: user } = await supabase.from('user').select('username, bio').eq('id', otherUserId).maybeSingle();
+  const { data: otherUser } = await supabase.from('user').select('username, bio').eq('id', userId).maybeSingle();
 
   if (!user || !otherUser) {
     throw new Error('User not found');
@@ -74,10 +74,13 @@ I'm introducing ${user.username} and ${otherUser.username} because ${reason}.
 Please write a introduction message to ${otherUser.username} that says you've been connected with them because ${reason}.
 
 Rules:
+- You can refer their bio, but don't use it as the main content of the message.
+  - ${user.username}'s bio: ${user.bio}
+  - ${otherUser.username}'s bio: ${otherUser.bio}
 - Keep it short and sweet.
 - Make it personal.
 - Make it interesting.
-- One sentence, be concise.
+- One or two sentences, be concise.
 `.trim(),
       },
     ],
@@ -90,13 +93,4 @@ Rules:
     fromUsername: 'Hecky',
     message,
   });
-}
-
-export async function isIntroductionAvailable(supabase: SupabaseClient, userId: string): Promise<boolean> {
-  const currentIntimacy = await getCurrentIntimacy(userId);
-
-  // calculate the chance of introduction by current intimacy
-  // FIXME: implement algorithm
-  const chance = currentIntimacy / 100;
-  return Math.random() < chance;
 }

@@ -9,7 +9,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Hackerhouse',
-  description: 'Make one AI friend to get million friends',
+  description: 'Make one AI friend to get a million friends',
 };
 
 export const viewport: Viewport = {

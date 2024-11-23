@@ -409,6 +409,22 @@ export type Database = {
             };
             Returns: unknown;
           };
+      search_insights: {
+        Args: {
+          query_embedding: string;
+          match_threshold: number;
+          match_count: number;
+        };
+        Returns: {
+          id: string;
+          quote: string;
+          user_id: string;
+          username: string;
+          avatar_url: string;
+          bio: string;
+          similarity: number;
+        }[];
+      };
       send_push_for_daily_question: {
         Args: {
           to_topics: string[];

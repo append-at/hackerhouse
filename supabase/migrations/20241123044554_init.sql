@@ -12,7 +12,10 @@ COMMENT ON COLUMN "user".id IS 'References the internal Supabase Auth user.';
 ALTER TABLE "user" ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Profiles are viewable by everyone" ON "user" FOR SELECT to authenticated USING (true);
 CREATE POLICY "Users can create their own profile" ON "user" FOR INSERT WITH CHECK (auth.uid() = id);
-CREATE POLICY "Users can update their own profile" ON "user" FOR UPDATE WITH CHECK (auth.uid() = id);
+CREATE POLICY "Users can update their own profile." on "user" FOR UPDATE
+    TO authenticated
+    USING ((SELECT auth.uid() AS uid) = id)
+    WITH CHECK ((SELECT auth.uid() AS uid) = id);
 
 -- Conversations
 CREATE TABLE IF NOT EXISTS user_conversation (

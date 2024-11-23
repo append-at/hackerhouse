@@ -4,7 +4,7 @@ const manifest = (): MetadataRoute.Manifest => {
   return {
     name: 'Hackerhouse',
     short_name: 'Hackerhouse',
-    description: 'Make one AI friend to get million friends',
+    description: 'Make one AI friend to get a million friends',
     start_url: '/',
     display: 'standalone',
     background_color: '#09090B',
