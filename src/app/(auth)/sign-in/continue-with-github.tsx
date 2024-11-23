@@ -1,12 +1,34 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
+import { useSupabaseClient } from '@/hooks/use-supabase';
 
 import GitHubIcon from './assets/github.module.svg';
 
 const ContinueWithGitHub = () => {
+  const supabase = useSupabaseClient();
+  const searchParams = useSearchParams();
+
+  const handleClick = async () => {
+    const next = new URL(`${window.location.origin}/auth/callback`);
+    next.searchParams.set('next', searchParams.get('next') ?? '/');
+
+    await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: next.toString(),
+      },
+    });
+  };
+
   return (
-    <Button size='lg'>
+    <Button
+      type='button'
+      size='lg'
+      onClick={handleClick}
+    >
       <GitHubIcon className='size-6' />
       <span>Continue With GitHub</span>
     </Button>
