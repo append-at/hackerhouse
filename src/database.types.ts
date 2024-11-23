@@ -156,6 +156,7 @@ export type Database = {
           bio: string | null;
           created_at: string;
           id: string;
+          name: string;
           topics: string[] | null;
           username: string;
         };
@@ -164,6 +165,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           id: string;
+          name: string;
           topics?: string[] | null;
           username: string;
         };
@@ -172,6 +174,7 @@ export type Database = {
           bio?: string | null;
           created_at?: string;
           id?: string;
+          name?: string;
           topics?: string[] | null;
           username?: string;
         };
