@@ -66,3 +66,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+html,
+body {
+  @apply font-sans antialiased;
+}
+
+input,
+textarea {
+  @apply font-sans text-foreground antialiased;
+}
+
+.font-display {
+  font-variation-settings: 'opsz' 72 !important;
+}
+
+/* Customized Typography */
+.text-xs {
+  font-variation-settings: normal;
+}
+
+.text-sm {
+  font-variation-settings: 'opsz' 24;
+}
+
+.text-lg {
+  font-variation-settings: 'opsz' 28;
+}
+
+.text-xl {
+  font-variation-settings: 'opsz' 30;
+}
+
+.text-2xl,
+.text-3xl,
+.text-4xl,
+.text-5xl,
+.text-6xl,
+.text-7xl,
+.text-8xl,
+.text-9xl {
+  font-variation-settings: 'opsz' 32;
+}
