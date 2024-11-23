@@ -29,7 +29,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className='flex h-[100dvh] flex-col bg-black text-white'>
+    <div className='flex h-full flex-col bg-black text-white'>
       <div className='flex-1 space-y-4 overflow-y-auto px-4 py-2'>
         {messages.map((message, index) => {
           const parsed = parseQuoteMessage(message.content);
