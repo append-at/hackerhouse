@@ -1,5 +1,4 @@
-Hackerhouse
-==========
+# Hackerhouse
 
 This is a project for Supabase x YC AI Hackathon 2024.
 
@@ -42,4 +41,3 @@ pnpm migration:apply
 
 1. First, create a new file in `supabase/sql-functions/`
 2. Go to Supabase Studio, navigate to SQL Editor, and run `CREATE OR REPLACE FUNCTION ...` with the content of the new file. **This has to be done manually.**
-
