@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Provider as WrapProvider } from 'react-wrap-balancer';
 
 import { cn } from '@/lib/utils';
@@ -10,6 +10,12 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Hackerhouse',
   description: 'Make one AI friend to get million friends',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 type Props = {

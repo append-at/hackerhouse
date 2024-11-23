@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { CircleUserIcon, SpeechIcon, UsersIcon } from 'lucide-react';
 
 const Navigation = () => (
-  <nav className='shrink-0 text-center'>
+  <nav className='pb-safe shrink-0 text-center'>
     <NavigationItem path='/chat'>
       <SpeechIcon className='size-6' />
     </NavigationItem>

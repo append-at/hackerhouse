@@ -52,7 +52,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
   }, [trigger, messages]);
 
   return (
-    <div className='flex h-full flex-col bg-black text-white'>
+    <div className='flex h-full min-h-0 flex-col bg-black text-white'>
       <div
         ref={chatListRef}
         className='flex-1 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'

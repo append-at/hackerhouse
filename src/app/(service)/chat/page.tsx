@@ -2,6 +2,7 @@ import { getCurrentUser, listMyAiConversations } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
 import ChatInterface from './_page';
 import { generateId } from 'ai';
+import { Header } from '../_layouts/header';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -32,10 +33,13 @@ const Page = async () => {
   }
 
   return (
-    <ChatInterface
-      sessionId={sessionId}
-      initialMessages={initialMessages}
-    />
+    <div className='flex h-full flex-col'>
+      <Header title='Chat' />
+      <ChatInterface
+        sessionId={sessionId}
+        initialMessages={initialMessages}
+      />
+    </div>
   );
 };
 

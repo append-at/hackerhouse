@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import animate from 'tailwindcss-animate';
+import safeArea from 'tailwindcss-safe-area';
 
 export default {
   darkMode: ['class'],
@@ -75,5 +76,5 @@ export default {
       },
     },
   },
-  plugins: [animate],
+  plugins: [animate, safeArea],
 } satisfies Config;
