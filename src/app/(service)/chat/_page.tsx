@@ -6,13 +6,19 @@ import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
 import { Heart, LightbulbIcon, MessageSquare } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser } from '@/app/context';
 
-export default function ChatPage() {
+type Props = {
+  initialMessages: any[];
+};
+
+const ChatInterface = ({ initialMessages }: Props) => {
+  const user = useUser();
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: '/api/chat',
+    initialMessages,
   });
-  // FIXME: 여기서 유저 정보를 불러와야 함 @Chanhee
 
   return (
     <div className='flex h-full flex-col bg-black text-white'>
@@ -31,7 +37,7 @@ export default function ChatPage() {
             {message.toolInvocations && message.toolInvocations.length > 0 && (
               <div className='flex flex-col gap-4'>
                 {message.toolInvocations.map((toolInvocation) => {
-                  const { toolName, toolCallId, state, args } = toolInvocation;
+                  const { toolName, toolCallId, args } = toolInvocation;
                   if (toolName === 'askForSharingInsight') {
                     return (
                       <div key={toolCallId}>
@@ -39,13 +45,14 @@ export default function ChatPage() {
                           icon={LightbulbIcon}
                           text='Found Insight'
                         />
-                        <Card className='max-w-[80%] space-y-2 border-none bg-zinc-800/50 p-3'>
-                          <p className='text-white'>{args.quote}</p>
+                        <Card className='max-w-sm space-y-6 rounded-xl border-none bg-muted px-6 py-5'>
+                          <p className='font-display text-white'>{args.quote}</p>
                           <div className='flex items-center gap-2'>
-                            <Avatar className='h-6 w-6'>
-                              <AvatarFallback>{/* TODO: 유저 아바타 넣어야 함 */}HJ</AvatarFallback>
+                            <Avatar className='size-4'>
+                              <AvatarImage src={user.avatar_url ?? ''} />
+                              <AvatarFallback>{user.username.slice(0, 1).toUpperCase()}</AvatarFallback>
                             </Avatar>
-                            <span className='text-sm text-zinc-400'>Replaceme Chanhee</span>
+                            <span className='text-xs text-muted-foreground'>{user.name}</span>
                           </div>
                         </Card>
                       </div>
@@ -74,4 +81,6 @@ export default function ChatPage() {
       </form>
     </div>
   );
-}
+};
+
+export default ChatInterface;

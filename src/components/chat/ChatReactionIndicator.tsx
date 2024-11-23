@@ -7,9 +7,9 @@ interface ReactionIndicatorProps {
 
 export default function ChatReactionIndicator({ icon: Icon, text }: ReactionIndicatorProps) {
   return (
-    <div className='mt-1 flex items-center gap-2'>
-      <div className='flex items-center gap-1 text-sm text-zinc-500'>
-        <Icon className='size-4' />
+    <div>
+      <div className='mb-2 flex items-center gap-1 text-sm text-muted-foreground'>
+        <Icon className='size-3.5' />
         {text}
       </div>
     </div>

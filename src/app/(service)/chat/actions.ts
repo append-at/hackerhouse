@@ -1,0 +1,23 @@
+'use server';
+
+import { type Json } from '@/database.types';
+import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
+import { Message } from 'ai';
+
+export const syncChatConversations = async (data: Message[], chatInstantId?: string) => {
+  const supabase = await createServerSupabase();
+  const user = await getCurrentUser(supabase);
+
+  const response = await supabase
+    .from('ai_conversation')
+    .upsert({
+      id: chatInstantId,
+      user_id: user.id,
+      data: data as unknown as Json,
+    })
+    .select()
+    .throwOnError();
+
+  return response.data?.at(-1);
+};

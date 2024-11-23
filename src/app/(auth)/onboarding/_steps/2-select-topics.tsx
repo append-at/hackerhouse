@@ -44,7 +44,7 @@ const SelectTopics = () => {
 
   const handleSubmit = async (values: Topics) => {
     await setUserTopics(values.topics);
-    router.replace('/chat/1');
+    router.replace('/chat');
   };
 
   return (

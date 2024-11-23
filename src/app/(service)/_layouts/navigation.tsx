@@ -6,7 +6,7 @@ import { CircleUserIcon, SpeechIcon, UsersIcon } from 'lucide-react';
 
 const Navigation = () => (
   <nav className='shrink-0 text-center'>
-    <NavigationItem path='/chat/1'>
+    <NavigationItem path='/chat'>
       <SpeechIcon className='size-6' />
     </NavigationItem>
     <NavigationItem path='/people'>
