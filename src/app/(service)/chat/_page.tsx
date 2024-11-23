@@ -5,7 +5,7 @@ import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
-import { Heart, LightbulbIcon, MessageSquare } from 'lucide-react';
+import { HeartIcon, LightbulbIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
@@ -39,7 +39,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
     }
 
     syncChatConversations(sessionId, messages);
-  }, [trigger]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [trigger, messages]);
 
   return (
     <div className='flex h-full flex-col bg-black text-white'>
@@ -68,7 +68,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
               {message.toolInvocations && message.toolInvocations.length > 0 && (
                 <div className='flex flex-col gap-4'>
                   {message.toolInvocations.map((toolInvocation) => {
-                    const { toolName, toolCallId, args } = toolInvocation;
+                    const { toolName, toolCallId, args, state } = toolInvocation;
                     if (toolName === 'askForSharingInsight') {
                       return (
                         <div key={toolCallId}>
@@ -86,6 +86,15 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                               <span className='text-xs text-muted-foreground'>{user.name}</span>
                             </div>
                           </Card>
+                        </div>
+                      );
+                    } else if (toolName === 'userConfirmedToShareInsight') {
+                      return (
+                        <div key={toolCallId}>
+                          <ChatReactionIndicator
+                            icon={HeartIcon}
+                            text='Friendship Increased'
+                          />
                         </div>
                       );
                     }
