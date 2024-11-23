@@ -1,13 +1,28 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { cn, chunk } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type Topics, TopicsSchema } from '../schema';
+import { setUserTopics } from './actions';
+import { Spinner } from '@/components/ui/spinner';
 
 const SelectTopics = () => {
-  const [topics, setTopics] = useState(new Set<string>());
   const [percent, setPercent] = useState(0);
 
+  const router = useRouter();
+  const form = useForm<Topics>({
+    mode: 'all',
+    resolver: zodResolver(TopicsSchema),
+    defaultValues: {
+      topics: [],
+    },
+  });
+
+  const topics = new Set(form.watch('topics'));
   const handleToggle = (topic: string) => () => {
     const set = new Set(topics);
 
@@ -17,14 +32,20 @@ const SelectTopics = () => {
       set.add(topic);
     }
 
-    setTopics(set);
+    form.setValue('topics', [...set], {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   };
 
-  const handleScroll = (i: number) => (nextPercent: number) => {
+  const handleScroll = (nextPercent: number) => {
     setPercent(nextPercent);
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (values: Topics) => {
+    await setUserTopics(values.topics);
+    router.replace('/chat/1');
+  };
 
   return (
     <>
@@ -32,12 +53,16 @@ const SelectTopics = () => {
         <h1 className='mx-auto max-w-sm text-3xl font-semibold'>Choose topics you’re interested in</h1>
       </header>
 
-      <article className='flex w-full grow flex-col justify-center gap-3'>
+      <form
+        className='flex w-full grow flex-col justify-center gap-3'
+        id='form'
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         {chunk(TOPICS, 3).map((row, i) => (
           <ScrollSyncRow
             percent={percent}
             key={i}
-            onScroll={handleScroll(i)}
+            onScroll={handleScroll}
           >
             {row.map((topic) => (
               <button
@@ -50,6 +75,7 @@ const SelectTopics = () => {
                   'data-[active="true"]:bg-foreground data-[active="true"]:text-primary-foreground',
                   'transition-all',
                 )}
+                type='button'
                 onClick={handleToggle(topic.name)}
               >
                 <span>{topic.emoji}</span>
@@ -58,15 +84,16 @@ const SelectTopics = () => {
             ))}
           </ScrollSyncRow>
         ))}
-      </article>
+      </form>
 
       <div className='fixed bottom-20 left-0 w-full text-center shadow-lg'>
         <Button
           className='h-12 w-64 rounded-xl text-base'
           disabled={!topics.size}
-          onSubmit={handleSubmit}
+          form='form'
+          type='submit'
         >
-          Finish
+          {form.formState.isSubmitting ? <Spinner className='!size-5' /> : 'Finish'}
         </Button>
       </div>
     </>
@@ -95,10 +122,10 @@ const ScrollSyncRow = ({ percent, onScroll, children }: ScrollSyncRowProps) => {
   }, [percent]);
 
   return (
-    <div className='w-full overflow-hidden px-6'>
+    <div className='w-full overflow-hidden'>
       <div
         ref={root}
-        className='hide-scrollbar overflow-auto whitespace-nowrap'
+        className='hide-scrollbar overflow-auto overscroll-x-none whitespace-nowrap px-6'
         onScroll={handleScroll}
       >
         {children}

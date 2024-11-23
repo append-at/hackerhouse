@@ -1,25 +1,27 @@
-import { redirect } from 'next/navigation';
-import { Steps } from './schema';
 import { cn } from '@/lib/utils';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 import SetupProfile from './_steps/1-setup-profile';
 import SelectTopics from './_steps/2-select-topics';
+import { OnboardingStep } from './schema';
+import { getCurrentUser } from '@/lib/db/queries';
 
-type Props = {
-  searchParams: Promise<{
-    step: string;
-  }>;
-};
+const Page = async () => {
+  const supabase = await createServerSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-const Page = async ({ searchParams }: Props) => {
-  const { step: originStep } = await searchParams;
-  const { data: step } = Steps.safeParse(originStep);
-  if (!step) {
-    return redirect('/onboarding?step=setup-profile');
+  let step: OnboardingStep = 'setup-profile';
+  if (user) {
+    const userData = await getCurrentUser(supabase).catch(() => null);
+    if (!userData?.topics?.length) {
+      step = 'select-topics';
+    }
   }
 
   return (
     <section className='flex h-dvh flex-col py-20'>
-      {step === 'setup-profile' && <SetupProfile />}
+      {step === 'setup-profile' && <SetupProfile user={user!} />}
       {step === 'select-topics' && <SelectTopics />}
 
       {/* Indicator */}

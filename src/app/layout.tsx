@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/toaster';
 import * as fonts from './fonts';
 
 import './globals.css';
@@ -18,6 +19,7 @@ const Layout = ({ children }: Props) => (
   <html>
     <body className={cn('dark', fonts.literata.variable, fonts.inter.variable, fonts.jetbrainsMono.variable)}>
       <main className='mx-auto min-h-dvh max-w-md sm:border-x sm:border-solid sm:border-border'>{children}</main>
+      <Toaster />
     </body>
   </html>
 );
