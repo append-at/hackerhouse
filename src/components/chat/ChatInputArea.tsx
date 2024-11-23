@@ -12,7 +12,7 @@ interface InputAreaProps {
 export default function ChatInputArea({ value, onChange, onReaction }: InputAreaProps) {
   return (
     <div className='px-6 py-3'>
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center gap-3'>
         <Input
           value={value}
           onChange={onChange}

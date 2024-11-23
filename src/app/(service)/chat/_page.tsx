@@ -5,7 +5,7 @@ import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
-import { HeartIcon, LightbulbIcon } from 'lucide-react';
+import { HeartIcon, SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
@@ -68,7 +68,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
             >
               {shouldShowDivider && (
                 <div className='py-3 text-center text-xs text-muted-foreground'>
-                  {dayjs(message.createdAt).format('MMMM D, YYYY')}
+                  {dayjs(message.createdAt).format('MMM D, YYYY')}
                 </div>
               )}
 
@@ -89,7 +89,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                       return (
                         <div key={toolCallId}>
                           <ChatReactionIndicator
-                            icon={LightbulbIcon}
+                            icon={SearchIcon}
                             text='Found Insight'
                           />
                           <Card
@@ -125,7 +125,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                     // Partial call (is calling) - should render a loading indicator
                     return (
                       <ChatReactionIndicator
-                        icon={LightbulbIcon}
+                        icon={SearchIcon}
                         text='Thinking...'
                       />
                     );

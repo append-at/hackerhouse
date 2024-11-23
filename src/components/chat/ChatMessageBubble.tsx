@@ -24,7 +24,7 @@ const chatBubbleVariants = cva('inline-block max-w-xs rounded-xl text-left px-5 
     {
       theme: 'humanist',
       by: 'counterpart',
-      class: 'font-display p-0 pl-2',
+      class: 'font-display font-[350] leading-relaxed p-0 pl-2',
     },
   ],
   defaultVariants: {
