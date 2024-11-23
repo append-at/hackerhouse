@@ -1,5 +1,5 @@
 import { Json } from '@/database.types';
-import { createBrowserSupabase } from '@/lib/db/client-rls';
+import { createBrowserSupabase } from '@/lib/db/supabase/browser';
 
 const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
 

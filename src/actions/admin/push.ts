@@ -1,4 +1,4 @@
-import { createAdminSupabase } from '@/lib/db/client-admin';
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import webpush from 'web-push';
 
 interface SendPushProps {

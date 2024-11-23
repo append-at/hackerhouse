@@ -1,6 +1,6 @@
 'use server';
 
-import { createAdminSupabase } from '@/lib/db/client-admin';
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import webpush from 'web-push';
 
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;

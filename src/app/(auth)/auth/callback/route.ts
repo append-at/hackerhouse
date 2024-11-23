@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createServerSupabase } from '@/lib/db/client-rls';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
