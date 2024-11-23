@@ -43,7 +43,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
 
   return (
     <div className='flex h-full flex-col bg-black text-white'>
-      <div className='flex-1 space-y-4 overflow-y-auto px-6 py-8'>
+      <div className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'>
         {messages.map((message, index) => {
           const prev = messages[index - 1];
           const shouldShowDivider = !prev || dayjs(prev.createdAt).isBefore(message.createdAt, 'day');
