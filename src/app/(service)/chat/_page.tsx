@@ -145,7 +145,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                           />
                         );
                       }
-                      const { insight } = toolInvocation.result as {
+                      const result = toolInvocation.result as {
                         insight: {
                           id: string;
                           bio: string;
@@ -154,7 +154,17 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                           username: string;
                           avatar_url: string;
                         };
-                      };
+                      } | null;
+                      if (!result) {
+                        return (
+                          <ChatReactionIndicator
+                            key={toolCallId}
+                            icon={LightbulbIcon}
+                            text='Thought for seconds'
+                          />
+                        );
+                      }
+                      const { insight } = result;
                       return (
                         <QuoteCard
                           key={toolCallId}
@@ -166,6 +176,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                     } else if (toolName === 'increaseIntimacy') {
                       return (
                         <ChatReactionIndicator
+                          key={toolCallId}
                           icon={HeartIcon}
                           text='Friendship Increased'
                         />
@@ -173,6 +184,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                     } else if (toolName === 'decreaseIntimacy') {
                       return (
                         <ChatReactionIndicator
+                          key={toolCallId}
                           icon={HeartCrackIcon}
                           text='Friendship Decreased'
                         />
@@ -180,6 +192,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                     } else if (toolName === 'connectPeople') {
                       return (
                         <ChatReactionIndicator
+                          key={toolCallId}
                           icon={LinkIcon}
                           text='Connected!'
                         />

@@ -16,7 +16,11 @@ const Page = async ({ params }: PageProps) => {
   const { otherUserName } = await params;
   const supabase = await createServerSupabase();
   const user = await getCurrentUser(supabase);
-  const otherUser = await getPublicUser(supabase, { username: otherUserName });
+  let otherUser = await getPublicUser(supabase, { username: otherUserName });
+  if (!otherUser) {
+    // try to get by id
+    otherUser = await getPublicUser(supabase, { id: otherUserName });
+  }
   const conversations = await listUserConversations(supabase);
   const currentUserConversation = conversations.find(
     (conversation) =>

@@ -3,17 +3,9 @@ import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import { CoreMessage, generateText } from 'ai';
 import OpenAI from 'openai';
 
-/**
- * Search relevant insights and offer to introduce them to the user.
- */
-export async function peoplexity(userId: string, situation: string, consideration: string) {
-  const supabase = createAdminSupabase();
-  const currentIntimacy = await getCurrentIntimacy(userId);
-
-  // TODO: implement algorithm
-  const allowedToConnectUser = Math.random() < currentIntimacy / 100;
-
+export async function searchInsights(consideration: string) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const supabase = createAdminSupabase();
 
   // 1. RAG insights
   const { data: embedResult } = await openai.embeddings.create({
@@ -25,11 +17,26 @@ export async function peoplexity(userId: string, situation: string, consideratio
 
   const { data: insightQueryResult } = await supabase.rpc('search_insights', {
     query_embedding: JSON.stringify(queryEmbedding),
-    match_threshold: 0.5,
+    match_threshold: 0.3,
     match_count: 5,
   });
   const insights = insightQueryResult || [];
+  return insights;
+}
 
+/**
+ * Search relevant insights and offer to introduce them to the user.
+ */
+export async function peoplexity(userId: string, situation: string, consideration: string) {
+  const currentIntimacy = await getCurrentIntimacy(userId);
+
+  // TODO: implement algorithm
+  const allowedToConnectUser = Math.random() < currentIntimacy / 100;
+
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  // 1. RAG insights
+  const insights = await searchInsights(consideration);
   console.log(
     'insights',
     insights.map((i) => ({ username: i.username, quote: i.quote, similarity: i.similarity })),

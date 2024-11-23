@@ -18,7 +18,7 @@ const Page = () => {
 
   return (
     <>
-      <Header title='Setting' />
+      <Header title='Settings' />
 
       <div className='flex items-center gap-3 border-b border-solid border-border px-6 py-6'>
         <Avatar className='size-12'>

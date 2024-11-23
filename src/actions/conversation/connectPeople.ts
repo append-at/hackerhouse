@@ -41,7 +41,7 @@ export async function sendMessageToConversation({
     userIds: fromUserId === 'ai' ? [userId, otherUserId] : [otherUserId],
     title: fromUsername,
     body: message,
-    url: `/conversation/${conversation.id}`,
+    url: `/people/dm/${otherUserId}`,
   });
 }
 
