@@ -14,7 +14,7 @@ const Page = async () => {
   let step: OnboardingStep = 'setup-profile';
   if (user) {
     const userData = await getCurrentUser(supabase).catch(() => null);
-    if (!userData?.topics?.length) {
+    if (userData?.topics?.length === 0) {
       step = 'select-topics';
     }
   }
