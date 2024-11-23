@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { LogOutIcon, UserIcon } from 'lucide-react';
+import { FlaskConicalIcon, LogOutIcon, UserIcon } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,17 @@ const Page = () => {
           <Link href='/setting/profile'>
             <UserIcon />
             <span>Edit Profile</span>
+          </Link>
+        </Button>
+        <Button
+          className='w-full justify-start px-6 text-base'
+          variant='ghost'
+          size='lg'
+          asChild
+        >
+          <Link href='/setting/lab'>
+            <FlaskConicalIcon />
+            <span>Lab</span>
           </Link>
         </Button>
         <SubscribePushNotificationButton />
