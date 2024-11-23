@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
@@ -20,6 +20,7 @@ type Props = {
 };
 
 const ChatInterface = ({ sessionId, initialMessages }: Props) => {
+  const chatListRef = useRef<HTMLDivElement>(null);
   const [trigger, setTriggerUpdate] = useState(0);
 
   const user = useUser();
@@ -36,6 +37,13 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
   });
 
   useEffect(() => {
+    chatListRef.current?.scrollTo({
+      top: chatListRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
+  useEffect(() => {
     if (messages.length === initialMessages.length) {
       return;
     }
@@ -45,7 +53,10 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
 
   return (
     <div className='flex h-full flex-col bg-black text-white'>
-      <div className='flex-1 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'>
+      <div
+        ref={chatListRef}
+        className='flex-1 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'
+      >
         {messages.map((message, index) => {
           const prev = messages[index - 1];
           const shouldShowDivider = !prev || dayjs(prev.createdAt).isBefore(message.createdAt, 'day');
@@ -81,7 +92,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                             icon={LightbulbIcon}
                             text='Found Insight'
                           />
-                          <Card className='mb-5 inline-block max-w-sm space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12'>
+                          <Card className='mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12'>
                             <p className='font-display text-white'>
                               <Balancer>{args.quote}</Balancer>
                             </p>

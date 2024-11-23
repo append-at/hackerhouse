@@ -51,7 +51,7 @@ const SetupProfile = ({ user }: Props) => {
       router.refresh();
     } catch {
       toast({
-        title: 'There was an error while creating your profile',
+        title: 'Something went wrong',
         description: 'Please try again later',
       });
     }

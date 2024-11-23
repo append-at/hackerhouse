@@ -2,6 +2,7 @@ import { getCurrentUser, getPublicUser, listUserConversationMessages, listUserCo
 import { createServerSupabase } from '@/lib/db/supabase/server';
 import { redirect } from 'next/navigation';
 import ChatInterface from '@/app/(service)/people/dm/[otherUserName]/_page';
+import { HeaderWithDepth } from '@/app/(service)/_layouts/header';
 
 interface PageProps {
   params: Promise<{
@@ -28,11 +29,17 @@ const Page = async ({ params }: PageProps) => {
   const messages = await listUserConversationMessages(supabase, currentUserConversation.id);
 
   return (
-    <ChatInterface
-      initialMessages={messages}
-      otherUserName={otherUserName}
-      conversationId={currentUserConversation.id}
-    />
+    <>
+      <HeaderWithDepth
+        path='/people'
+        title={otherUser?.name ?? ''}
+      />
+      <ChatInterface
+        initialMessages={messages}
+        otherUserName={otherUserName}
+        conversationId={currentUserConversation.id}
+      />
+    </>
   );
 };
 

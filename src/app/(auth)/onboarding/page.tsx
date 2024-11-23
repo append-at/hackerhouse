@@ -4,6 +4,7 @@ import SetupProfile from './_steps/1-setup-profile';
 import SelectTopics from './_steps/2-select-topics';
 import { OnboardingStep } from './schema';
 import { getCurrentUser } from '@/lib/db/queries';
+import { redirect } from 'next/navigation';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -14,8 +15,13 @@ const Page = async () => {
   let step: OnboardingStep = 'setup-profile';
   if (user) {
     const userData = await getCurrentUser(supabase).catch(() => null);
-    if (userData?.topics?.length === 0) {
+    const topics = userData?.topics ?? [];
+
+    if (!topics.length) {
       step = 'select-topics';
+    }
+    if (topics.length > 0) {
+      return redirect('/setting/profile');
     }
   }
 
