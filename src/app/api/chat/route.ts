@@ -1,5 +1,5 @@
-import { createServerSupabase } from '@/lib/db/client-rls';
 import { getCurrentUser } from '@/lib/db/queries';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 import { openai } from '@ai-sdk/openai';
 import { jsonSchema, streamText, tool } from 'ai';
 
