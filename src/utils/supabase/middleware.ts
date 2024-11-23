@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { redirect } from 'next/navigation';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
@@ -31,21 +32,21 @@ export const updateSession = async (request: NextRequest) => {
       },
     );
 
-    // This will refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/server-side/nextjs
-    // temporary disable this
-    // const user = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // // protected routes
-    // if (request.nextUrl.pathname.startsWith('/protected') && user.error) {
-    //   return NextResponse.redirect(new URL('/sign-in', request.url));
-    // }
+    if (!user && !request.nextUrl.pathname.startsWith('/sign-in') && !request.nextUrl.pathname.startsWith('/auth')) {
+      // no user, potentially respond by redirecting the user to the sign-in page
+      const url = request.nextUrl.clone();
+      const redirectTo = url.pathname + url.search;
 
-    // if (request.nextUrl.pathname === '/' && !user.error) {
-    //   return NextResponse.redirect(new URL('/protected', request.url));
-    // }
+      url.pathname = '/sign-in';
+      url.search = '';
+      url.searchParams.set('next', encodeURIComponent(redirectTo));
 
-    return response;
+      return NextResponse.redirect(url);
+    }
   } catch (e) {
     // If you are here, a Supabase client could not be created!
     // This is likely because you have not set up environment variables.
