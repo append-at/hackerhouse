@@ -63,7 +63,7 @@ const ChatInterface = ({
     <div className='flex h-full min-h-0 flex-col bg-black text-white'>
       <div
         ref={chatListRef}
-        className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'
+        className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 pt-1 pb-8'
       >
         {messages.map((message, index) => {
           const prev = messages[index - 1];

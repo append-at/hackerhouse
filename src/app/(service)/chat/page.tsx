@@ -37,13 +37,11 @@ const Page = async () => {
     sessionId = conversations[conversations.length - 1].id;
   }
 
-  console.log('testing', initialMessages);
-
   return (
     <div className='flex h-full flex-col'>
       <Header
         className='h-16'
-        title={<Logo />}
+        title={<Logo className='h-6 w-auto' />}
       />
       <ChatInterface
         sessionId={sessionId}

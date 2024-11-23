@@ -76,9 +76,9 @@ const ProfileList = async () => {
       })}
     </ul>
   ) : (
-    <div className='flex h-full grow items-center justify-center'>
+    <div className='flex flex-col h-full grow items-center justify-center px-10'>
       <h2 className='text-xl mb-1 font-medium'>No connections yet</h2>
-      <p className='text-center text-base text-muted-foreground'>
+      <p className='text-center text-sm text-muted-foreground'>
         Get to know the AI, and we'll introduce its friends
       </p>
     </div>
