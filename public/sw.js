@@ -1,4 +1,4 @@
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
   if (!event.data) return;
 
   const data = event.data.json();
@@ -7,18 +7,14 @@ self.addEventListener('push', function(event) {
     icon: '/icon-192x192.png', // Make sure to add this PWA icon
     badge: '/icon-192x192.png',
     data: {
-      url: data.url || '/'
-    }
+      url: data.url || '/',
+    },
   };
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data.url)
-  );
-}); 
+  event.waitUntil(clients.openWindow(event.notification.data.url));
+});
