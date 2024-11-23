@@ -75,8 +75,8 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
               {message.content && (
                 <ChatMessageBubble
                   content={message.content}
-                  sender={message.role === 'user' ? 'You' : 'AI'}
-                  isOutgoing={message.role === 'user'}
+                  by={message.role === 'user' ? 'me' : 'counterpart'}
+                  theme='humanist'
                   isStreaming={index === messages.length - 1 && isLoading}
                 />
               )}
@@ -92,8 +92,14 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                             icon={LightbulbIcon}
                             text='Found Insight'
                           />
-                          <Card className='mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12'>
-                            <p className='font-display text-white'>
+                          <Card
+                            className={cn(
+                              'mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12',
+                              'bg-gradient-to-bl from-indigo-200 via-red-200 to-yellow-100',
+                              'shadow-inner shadow-foreground/50',
+                            )}
+                          >
+                            <p className='font-display font-medium text-primary-foreground'>
                               <Balancer>{args.quote}</Balancer>
                             </p>
                             <div className='flex items-center gap-2'>
@@ -101,7 +107,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                                 <AvatarImage src={user.avatar_url ?? ''} />
                                 <AvatarFallback>{user.username.slice(0, 1).toUpperCase()}</AvatarFallback>
                               </Avatar>
-                              <span className='text-xs text-muted-foreground'>{user.name}</span>
+                              <span className='text-xs text-primary-foreground/60'>{user.name}</span>
                             </div>
                           </Card>
                         </div>

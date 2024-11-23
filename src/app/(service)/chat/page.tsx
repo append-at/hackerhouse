@@ -3,6 +3,7 @@ import { createServerSupabase } from '@/lib/db/supabase/server';
 import ChatInterface from './_page';
 import { generateId } from 'ai';
 import { Header } from '../_layouts/header';
+import Logo from '@/assets/logo.module.svg';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -34,7 +35,10 @@ const Page = async () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <Header title='Chat' />
+      <Header
+        className='h-16'
+        title={<Logo />}
+      />
       <ChatInterface
         sessionId={sessionId}
         initialMessages={initialMessages}

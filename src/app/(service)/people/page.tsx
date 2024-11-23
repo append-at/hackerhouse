@@ -15,7 +15,7 @@ const Page = async () => {
 
   return (
     <>
-      <Header title='Hackerhouse' />
+      <Header title='People' />
 
       {conversations.length > 0 ? (
         <ul>

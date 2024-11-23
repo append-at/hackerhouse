@@ -25,7 +25,7 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await sendMessage(conversationId, inputMessage);
+    await sendMessage(conversationId, user.id, inputMessage);
   };
 
   useEffect(() => {
@@ -50,6 +50,8 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
     });
   }, [messages]);
 
+  console.log('testing', messages);
+
   return (
     <div className='flex h-full min-h-0 flex-col bg-black text-white'>
       <div
@@ -73,8 +75,7 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
 
               <ChatMessageBubble
                 content={message.message ?? ''}
-                sender={message.user_id === user.id ? 'You' : otherUserName}
-                isOutgoing={message.user_id !== user.id}
+                by={message.user_id === user.id ? 'me' : 'counterpart'}
               />
             </div>
           );

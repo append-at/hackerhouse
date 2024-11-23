@@ -1,47 +1,47 @@
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
 import Balancer from 'react-wrap-balancer';
 
-interface MessageBubbleProps {
+type Props = VariantProps<typeof chatBubbleVariants> & {
   content: string;
-  sender: string;
-  isOutgoing?: boolean;
-  avatar?: string;
-  isStreaming?: boolean;
   className?: string;
-}
+  isStreaming?: boolean;
+};
 
-export default function ChatMessageBubble({
-  content,
-  sender,
-  isOutgoing = false,
-  avatar,
-  isStreaming = false,
-  className,
-}: MessageBubbleProps) {
-  return (
-    <div className={cn('chat-bubble', isOutgoing ? 'text-right' : 'text-left')}>
-      <Card
-        className={cn(
-          'inline-block max-w-xs space-y-2 rounded-xl border-none text-left',
-          isOutgoing ? 'ml-auto bg-zinc-800 px-5 py-3' : 'bg-transparent pl-2 font-display',
-          className,
-        )}
-      >
-        <p className='text-foreground'>
-          <Balancer>{content}</Balancer>
-          {isStreaming && <span className='ml-1 inline-block h-4 w-2 animate-pulse bg-zinc-400' />}
-        </p>
-        {/*{!isOutgoing && (*/}
-        {/*  <div className='flex items-center gap-2'>*/}
-        {/*    <Avatar className='h-6 w-6'>*/}
-        {/*      <AvatarImage src={avatar || '/placeholder.svg'} />*/}
-        {/*      <AvatarFallback>{sender.slice(0, 2).toUpperCase()}</AvatarFallback>*/}
-        {/*    </Avatar>*/}
-        {/*    <span className='text-sm text-zinc-400'>{sender}</span>*/}
-        {/*  </div>*/}
-        {/*)}*/}
-      </Card>
-    </div>
-  );
-}
+const chatBubbleVariants = cva('inline-block max-w-xs rounded-xl text-left px-5 py-3', {
+  variants: {
+    theme: {
+      normal: '',
+      humanist: 'border-none',
+    },
+    by: {
+      me: 'bg-muted',
+      counterpart: 'bg-transparent',
+    },
+  },
+  compoundVariants: [
+    {
+      theme: 'humanist',
+      by: 'counterpart',
+      class: 'font-display p-0 pl-2',
+    },
+  ],
+  defaultVariants: {
+    theme: 'normal',
+    by: 'me',
+  },
+});
+
+export const ChatBubble = ({ by, theme, content, className, isStreaming }: Props) => (
+  <div className={cn('chat-bubble flex', by === 'counterpart' ? '' : 'flex-row-reverse')}>
+    <Card className={cn(chatBubbleVariants({ by, theme }), className)}>
+      <p className='text-foreground'>
+        <Balancer>{content}</Balancer>
+      </p>
+    </Card>
+    {isStreaming && <span className='mx-3 size-2 shrink-0 animate-pulse rounded-full bg-orange-400/50' />}
+  </div>
+);
+
+export default ChatBubble;

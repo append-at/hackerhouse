@@ -27,28 +27,6 @@ export default function ChatInputArea({ value, onChange, onReaction }: InputArea
           <ArrowRightIcon className='size-4' />
         </Button>
       </div>
-      {/* <div className="mt-2 flex justify-end gap-2">
-        <Button
-          type="button"
-          size="sm"
-          variant="ghost"
-          onClick={() => onReaction('insight')}
-          className="text-zinc-400 hover:text-white"
-        >
-          <MessageSquare className="mr-1 h-4 w-4" />
-          Insight
-        </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant="ghost"
-          onClick={() => onReaction('friendship')}
-          className="text-zinc-400 hover:text-white"
-        >
-          <Heart className="mr-1 h-4 w-4" />
-          Friendship
-        </Button>
-      </div> */}
     </div>
   );
 }
