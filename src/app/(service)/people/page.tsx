@@ -4,6 +4,7 @@ import { RelativeTime } from '@/components/ui/relative-time';
 import { getCurrentUser, listUserConversations } from '@/lib/db/queries';
 import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import { createServerSupabase } from '@/lib/db/supabase/server';
+import { Header } from '../_layouts/header';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -14,9 +15,7 @@ const Page = async () => {
 
   return (
     <>
-      <header className='flex h-20 items-center px-6'>
-        <h1 className='text-3xl font-bold'>Hackerhouse</h1>
-      </header>
+      <Header title='Hackerhouse' />
 
       {conversations.length > 0 ? (
         <ul>

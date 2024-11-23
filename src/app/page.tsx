@@ -13,7 +13,7 @@ const Page = async () => {
     if (err.message.startsWith('User profile')) return redirect('/onboarding');
   }
 
-  return redirect('/people');
+  return redirect('/chat');
 };
 
 export default Page;
