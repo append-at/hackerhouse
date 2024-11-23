@@ -3,11 +3,13 @@ import { updateIntimacy } from '@/actions/intimacy';
 import { Tables } from '@/database.types';
 import { jsonSchema, Message, tool } from 'ai';
 import { peoplexity } from './peoplexity';
+import { connectPeople } from '@/actions/conversation/connectPeople';
 
 export async function aiChatAgent(user: Tables<'user'>, messages: Message[]) {
   const lastMessages = JSON.stringify(messages.slice(-3));
   const askedForInsight = lastMessages.includes('askForSharingInsight');
   const confirmedToShareInsight = lastMessages.includes('userConfirmedToShareInsight');
+  const allowedToConnectUser = lastMessages.includes('"allowedToConnectUser":true');
 
   const system = `You're Hecky, the friend of ${user.username}.
 User Profile: ${JSON.stringify(user)}
@@ -21,9 +23,9 @@ Your another role is to share insight from the ${user.username} to other users:
 - Insight should have: 1. novel perspective 2. depth of understanding
 
 Your another role is to answer considerately to user's consideration/questions from your other friends' insights.
-- Call searchForInsight if user has any concern/question/consideration.
+Call searchForInsight if user has any concern/question/consideration.
 - If there's no relavant insight, just answer the question as best as you can. (don't say that you've searched for insights but found nothing!)
-- If user asks about your friend, you can introduce your friend to user.
+- If allowedToConnectUser is true, you can introduce your friend to user by calling connectPeople tool after getting the explicit consent from user.
 `;
   const tools = {
     askForSharingInsight: tool({
@@ -78,11 +80,27 @@ Your another role is to answer considerately to user's consideration/questions f
         return await peoplexity(user.id, situation, consideration);
       },
     }),
+    connectPeople: tool({
+      description: 'Use this tool to connect user to another user',
+      parameters: jsonSchema<{ userId: string; reason: string }>({
+        type: 'object',
+        properties: {
+          userId: { type: 'string', description: 'UUID of the user who gave the insight. Otherwise will be rejected' },
+          reason: { type: 'string', description: 'Reason for connection (will be shown to the user. should look authentic and interesting)' },
+        },
+        required: ['userId'],
+      }),
+      execute: async ({ userId, reason }) => {
+        return await connectPeople({ userId: user.id, otherUserId: userId, reason });
+      },
+    }),
   };
 
   const activeTools: (keyof typeof tools)[] = askedForInsight
     ? ['userConfirmedToShareInsight']
-    : ['searchForInsight', 'askForSharingInsight'];
+    : allowedToConnectUser
+      ? ['connectPeople', 'searchForInsight', 'askForSharingInsight']
+      : ['searchForInsight', 'askForSharingInsight'];
 
   return {
     system,

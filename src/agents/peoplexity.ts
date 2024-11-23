@@ -11,7 +11,7 @@ export async function peoplexity(userId: string, situation: string, consideratio
   const currentIntimacy = await getCurrentIntimacy(userId);
 
   // TODO: implement algorithm
-  const isIntroductionEnabled = Math.random() < currentIntimacy / 100;
+  const allowedToConnectUser = Math.random() < currentIntimacy / 100;
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -47,10 +47,10 @@ export async function peoplexity(userId: string, situation: string, consideratio
  - id: id of the insight
  - messageToUser: concise response to user. this is important.
     - you should act like you're casually sharing your friend's saying to the user.
-    - ${isIntroductionEnabled ? 'and you should suggest to introduce them to the user.' : ''}
+    - ${allowedToConnectUser ? 'and you should suggest to introduce them to the user.' : ''}
     - be natural and consider the user's intimacy with you. (Intimacy is ${currentIntimacy}%)
     - refer the username as "my friend <name>"
-    - example: (e.g. "I thought this might help - my friend John said <quote>. ${isIntroductionEnabled ? `If you're interested, maybe I can connect you with him` : ''}")
+    - example: (e.g. "I thought this might help - my friend John said <quote>. ${allowedToConnectUser ? `If you're interested, maybe I can connect you with him` : ''}")
 1.2. If nothing looks relavant with situation & consideration, just return null.
 
 Situation: ${situation}
@@ -89,6 +89,6 @@ Insights loaded by RAG vector search: ${JSON.stringify(insights)}`.trim(),
   return {
     messageToUser,
     insight,
-    isIntroductionEnabled,
+    allowedToConnectUser,
   };
 }

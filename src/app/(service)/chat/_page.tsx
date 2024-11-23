@@ -14,6 +14,33 @@ import { syncChatConversations } from './actions';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
 
+type QuoteCardProps = {
+  quote: string;
+  avatar_url?: string;
+  username: string;
+};
+
+const QuoteCard = ({ quote, avatar_url, username }: QuoteCardProps) => (
+  <Card
+    className={cn(
+      'mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12',
+      'bg-gradient-to-bl from-indigo-200 via-red-200 to-yellow-100',
+      'shadow-inner shadow-foreground/50',
+    )}
+  >
+    <p className='font-display text-lg font-medium leading-snug tracking-tight text-primary-foreground'>
+      <Balancer>{quote}</Balancer>
+    </p>
+    <div className='flex items-center gap-2'>
+      <Avatar className='size-4'>
+        <AvatarImage src={avatar_url ?? ''} />
+        <AvatarFallback>{username.slice(0, 1).toUpperCase()}</AvatarFallback>
+      </Avatar>
+      <span className='text-xs text-primary-foreground/60'>{username}</span>
+    </div>
+  </Card>
+);
+
 type Props = {
   sessionId: string;
   initialMessages: any[];
@@ -82,7 +109,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
               )}
 
               {message.toolInvocations && message.toolInvocations.length > 0 && (
-                <div className='flex flex-col gap-4'>
+                <div className='flex w-fit flex-col gap-4'>
                   {message.toolInvocations.map((toolInvocation) => {
                     const { toolName, toolCallId, args, state } = toolInvocation;
                     if (toolName === 'askForSharingInsight') {
@@ -92,24 +119,11 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                             icon={LightbulbIcon}
                             text='Found Insight'
                           />
-                          <Card
-                            className={cn(
-                              'mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12',
-                              'bg-gradient-to-bl from-indigo-200 via-red-200 to-yellow-100',
-                              'shadow-inner shadow-foreground/50',
-                            )}
-                          >
-                            <p className='font-display text-lg font-medium leading-snug tracking-tight text-primary-foreground'>
-                              <Balancer>{args.quote}</Balancer>
-                            </p>
-                            <div className='flex items-center gap-2'>
-                              <Avatar className='size-4'>
-                                <AvatarImage src={user.avatar_url ?? ''} />
-                                <AvatarFallback>{user.username.slice(0, 1).toUpperCase()}</AvatarFallback>
-                              </Avatar>
-                              <span className='text-xs text-primary-foreground/60'>{user.name}</span>
-                            </div>
-                          </Card>
+                          <QuoteCard
+                            quote={args.quote}
+                            avatar_url={user.avatar_url || undefined}
+                            username={user.username}
+                          />
                         </div>
                       );
                     } else if (toolName === 'userConfirmedToShareInsight') {
@@ -121,13 +135,41 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                           />
                         </div>
                       );
+                    } else if (toolName === 'searchForInsight') {
+                      if (state !== 'result') {
+                        return (
+                          <ChatReactionIndicator
+                            icon={LightbulbIcon}
+                            text='Thinking...'
+                          />
+                        );
+                      }
+                      const { insight } = toolInvocation.result as {
+                        insight: {
+                          id: string;
+                          bio: string;
+                          quote: string;
+                          user_id: string;
+                          username: string;
+                          avatar_url: string;
+                        };
+                      };
+                      return (
+                        <QuoteCard
+                          quote={insight.quote}
+                          avatar_url={insight.avatar_url}
+                          username={insight.username}
+                        />
+                      );
                     }
-                    // Partial call (is calling) - should render a loading indicator
                     return (
-                      <ChatReactionIndicator
-                        icon={LightbulbIcon}
-                        text='Thinking...'
-                      />
+                      <>
+                        <ChatReactionIndicator
+                          icon={LightbulbIcon}
+                          text='Thinking...'
+                        />
+                        {JSON.stringify({ toolName, args, result: (toolInvocation as any).result }, null, 2)}
+                      </>
                     );
                   })}
                 </div>
