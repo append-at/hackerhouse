@@ -69,7 +69,7 @@ const Page = () => {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder='Sam'
