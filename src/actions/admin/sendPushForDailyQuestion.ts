@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
+import { createAdminSupabase } from '@/lib/db/client-admin';
 import webpush from 'web-push';
 
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
@@ -14,7 +14,7 @@ export interface SendPushForDailyQuestionProps {
 }
 
 export async function sendPushForDailyQuestion({ message, toTopics }: SendPushForDailyQuestionProps) {
-  const supabase = await createClient();
+  const supabase = createAdminSupabase();
 
   // Get users and their subscriptions while creating AI conversations
   const { data: subscriptions, error } = await supabase.rpc('send_push_for_daily_question', {

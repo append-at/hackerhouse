@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "migration:new": "supabase migration new",
     "migration:apply": "supabase migration up --linked && npm run generate:supabase",
-    "generate:supabase": "supabase gen types typescript --linked > src/database.types.ts"
+    "generate:supabase": "supabase gen types typescript --linked > src/database.types.ts && prettier --write src/database.types.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.0.4",
@@ -26,6 +26,7 @@
     "lucide-react": "^0.460.0",
     "next": "15.0.3",
     "next-themes": "^0.4.3",
+    "openai": "^4.73.0",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hook-form": "^7.53.2",

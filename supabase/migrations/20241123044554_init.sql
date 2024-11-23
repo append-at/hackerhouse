@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS ai_intimacy (
     user_id uuid REFERENCES "user"(id) ON DELETE CASCADE NOT NULL,
     delta int NOT NULL,
     reason text NOT NULL,
-    at timestamptz DEFAULT now() NOT NULL    
+    at timestamptz DEFAULT now() NOT NULL
 );
 COMMENT ON TABLE ai_intimacy IS 'The change in intimacy score for a user.';
 

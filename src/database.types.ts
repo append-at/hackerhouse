@@ -222,21 +222,21 @@ export type Database = {
           conversation_id: string;
           id: string;
           message: string;
-          user_id: string;
+          user_id: string | null;
         };
         Insert: {
           at?: string;
           conversation_id: string;
           id?: string;
           message: string;
-          user_id: string;
+          user_id?: string | null;
         };
         Update: {
           at?: string;
           conversation_id?: string;
           id?: string;
           message?: string;
-          user_id?: string;
+          user_id?: string | null;
         };
         Relationships: [
           {

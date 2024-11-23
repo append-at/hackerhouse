@@ -1,5 +1,5 @@
 import { Json } from '@/database.types';
-import { createClient } from '@/utils/supabase/client';
+import { createBrowserSupabase } from '@/utils/supabase/client';
 
 const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
 
@@ -27,7 +27,7 @@ export async function registerPushNotification() {
     });
 
     // Store subscription in database
-    const supabase = createClient();
+    const supabase = createBrowserSupabase();
     const { data: user } = await supabase.auth.getUser();
     if (!user.user) {
       throw new Error('please sign in');

@@ -1,4 +1,6 @@
-import { createClient } from '@/utils/supabase/client';
+'use server';
+
+import { createAdminSupabase } from '@/lib/db/client-admin';
 
 export type IntimacyActionType =
   | 'DAILY_LOGIN'
@@ -12,6 +14,8 @@ const MIN_VALUE = 0;
 const MAX_VALUE = 100;
 const DAILY_MAX_INCREASE = 3;
 
+const normalizeIntimacy = (intimacy: number) => Math.max(MIN_VALUE, Math.min(MAX_VALUE, intimacy));
+
 const DELTA: Record<IntimacyActionType, number> = {
   // 증가 요소 (퍼센트)
   DAILY_LOGIN: 1,
@@ -22,7 +26,7 @@ const DELTA: Record<IntimacyActionType, number> = {
 };
 
 async function getCurrentIntimacy(userId: string): Promise<number> {
-  const supabase = createClient();
+  const supabase = createAdminSupabase();
 
   const { data, error } = await supabase.from('ai_intimacy').select('delta').eq('user_id', userId);
 
@@ -33,7 +37,7 @@ async function getCurrentIntimacy(userId: string): Promise<number> {
 }
 
 async function getDailyIncrease(userId: string): Promise<number> {
-  const supabase = createClient();
+  const supabase = createAdminSupabase();
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
 
@@ -50,25 +54,29 @@ async function getDailyIncrease(userId: string): Promise<number> {
   return data.reduce((sum, record) => sum + record.delta, 0);
 }
 
-export async function updateIntimacy(userId: string, actionType: IntimacyActionType, reason: string): Promise<number> {
-  const supabase = createClient();
+export async function updateIntimacy(
+  userId: string,
+  actionType: IntimacyActionType,
+  reason: string,
+  multiplier: number = 1,
+): Promise<number> {
+  const supabase = createAdminSupabase();
   const currentIntimacy = await getCurrentIntimacy(userId);
 
   // 변화량 계산
-  let delta = (currentIntimacy * DELTA[actionType]) / 100;
+  let newIntimacy = normalizeIntimacy(currentIntimacy * (1 + DELTA[actionType] / 100) ** multiplier);
 
-  if (delta > 0) {
+  if (newIntimacy > currentIntimacy) {
     // 일일 최대 증가량 체크
     const dailyIncrease = await getDailyIncrease(userId);
-    if (dailyIncrease + delta > DAILY_MAX_INCREASE) {
-      delta = Math.max(0, DAILY_MAX_INCREASE - dailyIncrease);
+    if (dailyIncrease + newIntimacy - currentIntimacy > DAILY_MAX_INCREASE) {
+      newIntimacy = normalizeIntimacy(currentIntimacy + DAILY_MAX_INCREASE);
     }
   }
-  const newIntimacy = Math.max(MIN_VALUE, Math.min(MAX_VALUE, currentIntimacy + delta));
-  const actualDelta = Math.round((newIntimacy - currentIntimacy) * 100) / 100;
+  const delta = newIntimacy - currentIntimacy;
 
-  if (actualDelta !== 0) {
-    await supabase.from('ai_intimacy').insert({ user_id: userId, delta: actualDelta, reason }).throwOnError();
+  if (delta !== 0) {
+    await supabase.from('ai_intimacy').insert({ user_id: userId, delta, reason }).throwOnError();
   }
   return newIntimacy;
 }
