@@ -3,8 +3,9 @@
 import { Button } from '@/components/ui/button';
 import { LogOutIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import { signOut } from './actions';
 import { Header } from '../_layouts/header';
+import { signOut } from './actions';
+import SubscribePushNotificationButton from './subscribe-notification';
 
 const Page = () => {
   const handleClickSignOut = async () => {
@@ -27,6 +28,7 @@ const Page = () => {
             <span>Profile</span>
           </Link>
         </Button>
+        <SubscribePushNotificationButton />
         <Button
           className='w-full justify-start px-6 text-base text-rose-500'
           variant='ghost'
