@@ -12,7 +12,7 @@ const ProfileInterface = ({ user }: Props) => (
         <AvatarImage src={user.avatar_url ?? ''} />
         <AvatarFallback>{user.name?.[0].toUpperCase()}</AvatarFallback>
       </Avatar>
-      <p className='text-xl font-medium text-muted-foreground'>{user.name}</p>
+      <p className='text-xl font-medium'>{user.name}</p>
     </div>
 
     <div className='whitespace-pre-line text-base'>{user.bio}</div>

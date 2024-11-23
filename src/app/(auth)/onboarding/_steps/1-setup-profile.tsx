@@ -19,7 +19,7 @@ type Props = {
 };
 
 const getDefaultValues = (user: User): Profile => {
-  const names = `${user.user_metadata.full_name}`.split(' ').filter(Boolean);
+  const names = `${user.user_metadata.full_name || ''}`.split(' ').filter(Boolean);
   const username = user.user_metadata.preferred_username || user.user_metadata.user_name;
   const avatarUrl = user.user_metadata.avatar_url;
 

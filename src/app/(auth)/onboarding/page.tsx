@@ -17,10 +17,10 @@ const Page = async () => {
     const userData = await getCurrentUser(supabase).catch(() => null);
     const topics = userData?.topics ?? [];
 
-    if (!topics.length) {
+    if (userData && !topics.length) {
       step = 'select-topics';
     }
-    if (topics.length > 0) {
+    if (userData && topics.length > 0) {
       return redirect('/setting/profile');
     }
   }

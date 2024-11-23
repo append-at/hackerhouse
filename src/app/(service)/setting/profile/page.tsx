@@ -42,7 +42,6 @@ const Page = () => {
   };
 
   const isDisabled = form.formState.isSubmitting || Object.keys(form.formState.errors).length > 0;
-  console.log(form.formState.errors);
 
   return (
     <>
