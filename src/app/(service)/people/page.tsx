@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
+import Balancer from 'react-wrap-balancer';
 
 import { getCurrentUser, listUserConversations } from '@/lib/db/queries';
 import { createAdminSupabase } from '@/lib/db/supabase/admin';
@@ -79,7 +80,9 @@ const ProfileList = async () => {
     <div className='flex flex-col h-full grow items-center justify-center px-10'>
       <h2 className='text-xl mb-1 font-medium'>No connections yet</h2>
       <p className='text-center text-sm text-muted-foreground'>
-        Get to know the AI, and we'll introduce its friends
+        <Balancer ratio={0.5}>
+          Once we become friends, I can introduce you to my friends.
+        </Balancer>
       </p>
     </div>
   );
