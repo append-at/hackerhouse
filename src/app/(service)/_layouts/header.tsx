@@ -11,7 +11,7 @@ type Props = Omit<React.HTMLProps<HTMLElement>, 'title' | 'path'> & {
 export const Header = ({ title, className, ...props }: Props) => (
   <header
     {...props}
-    className={cn('pt-safe flex h-20 shrink-0 items-center px-6', className)}
+    className={cn('flex h-20 shrink-0 items-center px-6', className)}
   >
     <h1 className='text-3xl font-bold tracking-tight'>{title}</h1>
   </header>
@@ -29,10 +29,7 @@ export const HeaderWithDepth = ({
 }: HeaderWithDepthProps) => (
   <header
     {...props}
-    className={cn(
-      'pt-safe flex h-12 shrink-0 items-center gap-2.5 px-6',
-      className,
-    )}
+    className={cn('flex h-12 shrink-0 items-center gap-2.5 px-6', className)}
   >
     <Button
       variant='ghost'
