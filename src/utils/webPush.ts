@@ -1,23 +1,23 @@
-import { Json } from "@/database.types";
-import { createClient } from "@/utils/supabase/client";
+import { Json } from '@/database.types';
+import { createClient } from '@/utils/supabase/client';
 
 const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
 
 export async function registerPushNotification() {
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    console.log("Push notifications not supported");
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    console.log('Push notifications not supported');
     return;
   }
 
   try {
     // Register Service Worker
-    const registration = await navigator.serviceWorker.register("/sw.js");
-    console.log("Service Worker registered");
+    const registration = await navigator.serviceWorker.register('/sw.js');
+    console.log('Service Worker registered');
 
     // Check permission
     const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      throw new Error("Permission not granted for notifications");
+    if (permission !== 'granted') {
+      throw new Error('Permission not granted for notifications');
     }
 
     // Get push subscription
@@ -30,27 +30,25 @@ export async function registerPushNotification() {
     const supabase = createClient();
     const { data: user } = await supabase.auth.getUser();
     if (!user.user) {
-      throw new Error("please sign in");
+      throw new Error('please sign in');
     }
-    await supabase.from("push_subscription").insert({
+    await supabase.from('push_subscription').insert({
       subscription: subscription.toJSON() as Json,
       user_id: user.user.id,
     });
 
-    console.log("Push notification subscription successful");
+    console.log('Push notification subscription successful');
     return subscription;
   } catch (err) {
-    console.error("Error registering push notification:", err);
+    console.error('Error registering push notification:', err);
     throw err;
   }
 }
 
 // Helper function to convert VAPID key
 function urlBase64ToUint8Array(base64String: string) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, "+")
-    .replace(/_/g, "/");
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
