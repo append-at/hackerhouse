@@ -87,7 +87,15 @@ const ChatInterface = ({
                 content={message.message ?? ''}
                 by={message.user_id === user.id ? 'me' : 'counterpart'}
               >
-                {message.user_id !== user.id && (
+                {!message.user_id && (
+                  <Avatar className='size-7 mt-2 mr-3'>
+                    <AvatarImage src='https://hackerhouse-ten.vercel.app/favicon-512.png' />
+                    <AvatarFallback>
+                      {otherUser.name?.[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                {!!message.user_id && message.user_id !== user.id && (
                   <Avatar className='size-7 mt-2 mr-3'>
                     <AvatarImage src={otherUser.avatar_url ?? ''} />
                     <AvatarFallback>
