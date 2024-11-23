@@ -1,9 +1,8 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabase } from '@/lib/db/supabase/server';
 import { redirect } from 'next/navigation';
 
 const Page = async () => {
-  const supabase = await createClient();
-
+  const supabase = await createServerSupabase();
   const {
     data: { user },
   } = await supabase.auth.getUser();
