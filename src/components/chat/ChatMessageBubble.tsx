@@ -11,7 +11,7 @@ type Props = VariantProps<typeof chatBubbleVariants> & {
 };
 
 const chatBubbleVariants = cva(
-  'inline-block max-w-xs rounded-xl text-left px-5 py-3',
+  'inline-block max-w-xs rounded-xl text-left px-5 py-2.5',
   {
     variants: {
       theme: {

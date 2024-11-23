@@ -31,7 +31,7 @@ type QuoteCardProps = {
 const QuoteCard = ({ quote, avatar_url, username }: QuoteCardProps) => (
   <Card
     className={cn(
-      'mb-5 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12',
+      'mb-3 inline-block space-y-6 rounded-xl border-none bg-muted py-6 pl-6 pr-12',
       'bg-gradient-to-bl from-indigo-200 via-red-200 to-yellow-100',
       'shadow-inner shadow-foreground/50',
     )}
@@ -102,7 +102,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
             <div
               key={index}
               className={cn(
-                message.content && !message.toolInvocations?.length && 'mb-8',
+                message.content && !message.toolInvocations?.length && 'mb-6',
               )}
             >
               {shouldShowDivider && (
