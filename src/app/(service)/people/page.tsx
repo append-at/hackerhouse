@@ -44,7 +44,9 @@ const Page = async () => {
                       </span>
                     </div>
 
-                    <p className='text-sm text-muted-foreground'>TOOD: Show last message</p>
+                    <p className='text-sm text-muted-foreground'>
+                      {'latest_message' in item ? (item.latest_message as string) : 'No messages yet'}
+                    </p>
                   </div>
                 </Link>
               </li>
