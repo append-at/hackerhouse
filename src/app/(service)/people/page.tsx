@@ -65,7 +65,7 @@ const ProfileList = async () => {
                   </span>
                 </div>
 
-                <p className='text-sm text-muted-foreground'>
+                <p className='text-sm text-muted-foreground line-clamp-2'>
                   {'latest_message' in item
                     ? (item.latest_message as string)
                     : 'No messages yet'}
