@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatInputArea from '@/components/chat/ChatInputArea';
 import { useUser } from '@/app/context';
@@ -16,6 +16,8 @@ type Props = {
 };
 
 const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props) => {
+  const chatListRef = useRef<HTMLDivElement>(null);
+
   const supabase = useSupabaseClient();
   const [messages, setMessages] = useState(initialMessages);
   const [inputMessage, setInputMessage] = useState('');
@@ -41,9 +43,19 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
     };
   }, []);
 
+  useEffect(() => {
+    chatListRef.current?.scrollTo({
+      top: chatListRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
     <div className='flex h-full flex-col bg-black text-white'>
-      <div className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'>
+      <div
+        ref={chatListRef}
+        className='flex-1 space-y-4 overflow-y-auto bg-gradient-to-b from-orange-600/0 to-orange-600/10 px-6 py-8'
+      >
         {messages.map((message, index) => {
           const prev = messages[index - 1];
           const shouldShowDivider = !prev || dayjs(prev.at).isBefore(message.at, 'day');
