@@ -3,6 +3,7 @@
 import { createServerSupabase } from '@/lib/db/supabase/server';
 import { type Profile } from '../schema';
 import { getCurrentUser } from '@/lib/db/queries';
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
 export const createUser = async (profile: Profile) => {
   const supabase = await createServerSupabase();
@@ -23,7 +24,9 @@ export const createUser = async (profile: Profile) => {
 
 export const setUserTopics = async (topics: string[]) => {
   const supabase = await createServerSupabase();
-
   const user = await getCurrentUser(supabase);
-  await supabase.from('user').update({ topics }).eq('id', user.id);
+
+  // Because the RLS bug, we need to use the admin client to update the user
+  const db = createAdminSupabase();
+  await db.from('user').update({ topics }).eq('id', user.id).throwOnError();
 };
