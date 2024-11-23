@@ -3,6 +3,8 @@ import { createServerSupabase } from '@/lib/db/supabase/server';
 import { redirect } from 'next/navigation';
 import ChatInterface from '@/app/(service)/people/dm/[otherUserName]/_page';
 import { HeaderWithDepth } from '@/app/(service)/_layouts/header';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProfileInterface from './_profile';
 
 interface PageProps {
   params: Promise<{
@@ -34,11 +36,41 @@ const Page = async ({ params }: PageProps) => {
         path='/people'
         title={otherUser?.name ?? ''}
       />
-      <ChatInterface
-        initialMessages={messages}
-        otherUserName={otherUserName}
-        conversationId={currentUserConversation.id}
-      />
+
+      <Tabs
+        defaultValue='conversations'
+        className='w-full'
+      >
+        <div className='px-6 py-2'>
+          <TabsList className='w-full'>
+            <TabsTrigger
+              className='w-full'
+              value='conversations'
+            >
+              Conversations
+            </TabsTrigger>
+            <TabsTrigger
+              className='w-full'
+              value='profile'
+            >
+              Profile
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent
+          className='h-[calc(100dvh-110px)]'
+          value='conversations'
+        >
+          <ChatInterface
+            initialMessages={messages}
+            otherUserName={otherUserName}
+            conversationId={currentUserConversation.id}
+          />
+        </TabsContent>
+        <TabsContent value='profile'>
+          <ProfileInterface user={otherUser!} />
+        </TabsContent>
+      </Tabs>
     </>
   );
 };
