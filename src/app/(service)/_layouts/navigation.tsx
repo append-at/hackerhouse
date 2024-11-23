@@ -11,7 +11,7 @@ const Navigation = () => {
   const user = useUser();
 
   return (
-    <nav className='pb-safe shrink-0 text-center'>
+    <nav className='pb-2 shrink-0 text-center'>
       <NavigationItem path='/chat'>
         <SpeechIcon className='size-7' />
       </NavigationItem>
