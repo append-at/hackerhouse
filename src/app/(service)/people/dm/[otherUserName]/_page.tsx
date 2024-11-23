@@ -5,6 +5,7 @@ import { Tables } from '@/database.types';
 
 import { dayjs } from '@/lib/date';
 import { useSupabaseClient } from '@/hooks/use-supabase';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ChatInputArea from '@/components/chat/ChatInputArea';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import sendMessage from '@/app/(service)/people/dm/[otherUserName]/actions';
@@ -12,13 +13,14 @@ import { useUser } from '@/app/context';
 
 type Props = {
   initialMessages: Tables<'user_message'>[];
+  otherUser: Tables<'user'>;
   otherUserName: string;
   conversationId: string;
 };
 
 const ChatInterface = ({
   initialMessages,
-  otherUserName,
+  otherUser,
   conversationId,
 }: Props) => {
   const chatListRef = useRef<HTMLDivElement>(null);
@@ -84,7 +86,16 @@ const ChatInterface = ({
               <ChatMessageBubble
                 content={message.message ?? ''}
                 by={message.user_id === user.id ? 'me' : 'counterpart'}
-              />
+              >
+                {message.user_id !== user.id && (
+                  <Avatar className='size-7 mt-2 mr-3'>
+                    <AvatarImage src={otherUser.avatar_url ?? ''} />
+                    <AvatarFallback>
+                      {otherUser.name?.[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </ChatMessageBubble>
             </div>
           );
         })}

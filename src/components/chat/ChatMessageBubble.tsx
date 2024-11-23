@@ -8,6 +8,7 @@ type Props = VariantProps<typeof chatBubbleVariants> & {
   content: string;
   className?: string;
   isStreaming?: boolean;
+  children?: React.ReactNode;
 };
 
 const chatBubbleVariants = cva(
@@ -43,6 +44,7 @@ export const ChatBubble = ({
   content,
   className,
   isStreaming,
+  children,
 }: Props) => (
   <div
     className={cn(
@@ -50,6 +52,8 @@ export const ChatBubble = ({
       by === 'counterpart' ? '' : 'flex-row-reverse',
     )}
   >
+    {children}
+
     <Card className={cn(chatBubbleVariants({ by, theme }), className)}>
       <p className='text-foreground'>
         <Balancer>{content}</Balancer>

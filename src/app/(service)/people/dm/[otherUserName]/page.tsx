@@ -80,6 +80,7 @@ const Page = async ({ params }: PageProps) => {
           <ChatInterface
             initialMessages={messages}
             otherUserName={otherUserName}
+            otherUser={otherUser!}
             conversationId={currentUserConversation.id}
           />
         </TabsContent>
