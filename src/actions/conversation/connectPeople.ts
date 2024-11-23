@@ -5,6 +5,8 @@ import { sendPush } from '../admin/push';
 import OpenAI from 'openai';
 import { createUserConversation } from '@/lib/db/queries';
 import { Tables } from '@/database.types';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { getCurrentIntimacy } from '../intimacy';
 
 interface SendMessageToConversationProps {
   conversation: Tables<'user_conversation'>;
@@ -88,4 +90,13 @@ Rules:
     fromUsername: 'Hecky',
     message,
   });
+}
+
+export async function isIntroductionAvailable(supabase: SupabaseClient, userId: string): Promise<boolean> {
+  const currentIntimacy = await getCurrentIntimacy(userId);
+
+  // calculate the chance of introduction by current intimacy
+  // FIXME: implement algorithm
+  const chance = currentIntimacy / 100;
+  return Math.random() < chance;
 }

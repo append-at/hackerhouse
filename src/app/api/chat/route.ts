@@ -3,7 +3,8 @@ import { getCurrentUser } from '@/lib/db/queries';
 import { createServerSupabase } from '@/lib/db/supabase/server';
 import { openai } from '@ai-sdk/openai';
 import { jsonSchema, streamText, tool } from 'ai';
-import { updateIntimacy } from '@/actions/updateIntimacy';
+import { updateIntimacy } from '@/actions/intimacy';
+import { isIntroductionAvailable } from '@/actions/conversation/connectPeople';
 
 export const runtime = 'edge';
 
@@ -15,6 +16,10 @@ export async function POST(req: Request) {
   const lastMessages = JSON.stringify(messages.slice(-3));
   const askedForInsight = lastMessages.includes('askForSharingInsight');
   const confirmedToShareInsight = lastMessages.includes('userConfirmedToShareInsight');
+  const askedForIntroduction = lastMessages.includes('askForIntroduction');
+  const confirmedToIntroduce = lastMessages.includes('userConfirmedToIntroduce');
+
+  const introductionAvailable = await isIntroductionAvailable(supabase, user.id);
 
   const result = streamText({
     model: openai('gpt-4o'),
@@ -28,9 +33,22 @@ export async function POST(req: Request) {
   Your another role is to share insight from the ${user.username} to other users:
   - Call askForSharingInsight if user has shared something that you think is important, and you want to share to other users.
   - Insight should have: 1. novel perspective 2. depth of understanding
+${
+  introductionAvailable
+    ? `Your another role is to introduce user to other users:
+  - Call askForIntroduction if you think user's consideration is good enough to introduce to other users.
+`
+    : ''
+}
   `,
     experimental_activeTools:
-      askedForInsight && !confirmedToShareInsight ? ['userConfirmedToShareInsight'] : ['askForSharingInsight'],
+      askedForInsight && !confirmedToShareInsight
+        ? ['userConfirmedToShareInsight']
+        : askedForIntroduction && !confirmedToIntroduce
+          ? ['userConfirmedToIntroduce']
+          : introductionAvailable
+            ? ['askForSharingInsight', 'askForIntroduction']
+            : ['askForSharingInsight'],
     messages,
     tools: {
       askForSharingInsight: tool({
@@ -70,6 +88,30 @@ export async function POST(req: Request) {
           await updateIntimacy(user.id, 'NEW_INSIGHT', `User shared insight: ${insight!.quote}`);
           return 'Share insight complete! Thank you for sharing the insight. Very helpful! Friendship increased!';
         },
+      }),
+      askForIntroduction: tool({
+        description: 'Use this tool to introduce user to other user',
+        parameters: jsonSchema<{ otherUserId: string }>({
+          type: 'object',
+          properties: {
+            otherUserId: {
+              type: 'string',
+              description: 'The ID of the user to introduce to',
+            },
+          },
+        }),
+      }),
+      userConfirmedToIntroduce: tool({
+        description: 'Use this tool if user has confirmed to introduce to other user',
+        parameters: jsonSchema<{ otherUserId: string }>({
+          type: 'object',
+          properties: {
+            otherUserId: {
+              type: 'string',
+              description: 'The ID of the user to introduce to',
+            },
+          },
+        }),
       }),
     },
     experimental_continueSteps: true,

@@ -25,14 +25,17 @@ const DELTA: Record<IntimacyActionType, number> = {
   TIME_DECAY: -0.5,
 };
 
-async function getCurrentIntimacy(userId: string): Promise<number> {
+export async function getCurrentIntimacy(userId: string): Promise<number> {
   const supabase = createAdminSupabase();
 
-  const { data, error } = await supabase.from('ai_intimacy').select('delta').eq('user_id', userId);
+  const { data } = await supabase
+    .from('ai_intimacy')
+    .select('delta')
+    .eq('user_id', userId)
+    .order('at', { ascending: true })
+    .throwOnError();
 
-  if (error) throw error;
-
-  const totalDelta = data.reduce((sum, record) => sum + record.delta, INITIAL_VALUE);
+  const totalDelta = (data ?? []).reduce((sum, record) => sum + record.delta, INITIAL_VALUE);
   return Math.max(MIN_VALUE, Math.min(MAX_VALUE, totalDelta));
 }
 
