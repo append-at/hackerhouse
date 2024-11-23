@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send, MessageSquare, Heart } from 'lucide-react';
+import { Send, MessageSquare, Heart, ArrowRightIcon } from 'lucide-react';
 import React from 'react';
 
 interface InputAreaProps {
@@ -11,19 +11,23 @@ interface InputAreaProps {
 
 export default function ChatInputArea({ value, onChange, onReaction }: InputAreaProps) {
   return (
-    <div className="border-t border-zinc-800 p-4">
-      <div className="flex gap-2">
+    <div className='px-6 py-3'>
+      <div className='flex items-center gap-2'>
         <Input
           value={value}
           onChange={onChange}
-          placeholder="Type a message"
-          className="border-none bg-zinc-800 text-white placeholder:text-zinc-500"
+          placeholder='Type a message'
+          className='rounded-full border-none bg-zinc-800 pl-4 text-white placeholder:text-zinc-500'
         />
-        <Button type="submit" size="icon" variant="ghost" className="text-white">
-          <Send className="h-4 w-4" />
+        <Button
+          type='submit'
+          size='icon'
+          className='size-9 shrink-0 rounded-full shadow-none'
+        >
+          <ArrowRightIcon className='size-4' />
         </Button>
       </div>
-      <div className="mt-2 flex justify-end gap-2">
+      {/* <div className="mt-2 flex justify-end gap-2">
         <Button
           type="button"
           size="sm"
@@ -44,7 +48,7 @@ export default function ChatInputArea({ value, onChange, onReaction }: InputArea
           <Heart className="mr-1 h-4 w-4" />
           Friendship
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }
