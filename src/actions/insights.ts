@@ -11,6 +11,7 @@ export async function createInsight(userId: string, quote: string) {
   const { data } = await openai.embeddings.create({
     model: 'text-embedding-3-large',
     input: quote,
+    dimensions: 1536,
   });
   const embedding = data[0].embedding;
 
