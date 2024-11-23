@@ -139,6 +139,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                       if (state !== 'result') {
                         return (
                           <ChatReactionIndicator
+                            key={toolCallId}
                             icon={LightbulbIcon}
                             text='Thinking...'
                           />
@@ -156,6 +157,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                       };
                       return (
                         <QuoteCard
+                          key={toolCallId}
                           quote={insight.quote}
                           avatar_url={insight.avatar_url}
                           username={insight.username}
@@ -185,6 +187,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                     }
                     return (
                       <ChatReactionIndicator
+                        key={toolCallId}
                         icon={LightbulbIcon}
                         text='Thinking...'
                       />
