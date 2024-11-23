@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
+import animate from 'tailwindcss-animate';
 
 export default {
   darkMode: ['class'],
@@ -8,6 +10,26 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      display: [
+        ['var(--font-literata)'],
+        {
+          fontVariationSettings: '"opsz" 60',
+        },
+      ],
+      sans: [
+        ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        {
+          fontVariationSettings: '"opsz" 26',
+        },
+      ],
+      mono: [
+        ['var(--font-jetbrains-mono)', ...defaultTheme.fontFamily.mono],
+        {
+          fontVariationSettings: '"ss01", "cv04", "zero"',
+        },
+      ],
+    },
     extend: {
       colors: {
         background: 'hsl(var(--background))',
@@ -58,5 +80,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [animate],
 } satisfies Config;
