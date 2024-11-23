@@ -13,7 +13,7 @@ const Page = () => {
           <li key={item.name}>
             <Link
               className='flex items-center gap-6 px-6 py-5 transition-colors hover:bg-muted/20'
-              href={`/chat/dm/${item.username}`}
+              href={`/people/dm/${item.username}`}
             >
               <Avatar className='round-full size-10'>
                 <AvatarImage src={item.avatar} />

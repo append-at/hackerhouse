@@ -6,7 +6,7 @@ import { CircleUserIcon, SpeechIcon, UsersIcon } from 'lucide-react';
 
 const Navigation = () => (
   <nav className='shrink-0 text-center'>
-    <NavigationItem path='/chat'>
+    <NavigationItem path='/chat/1'>
       <SpeechIcon className='size-6' />
     </NavigationItem>
     <NavigationItem path='/people'>
@@ -24,6 +24,10 @@ type NavigationItemProps = {
 };
 const NavigationItem = ({ path, children }: NavigationItemProps) => {
   const pathname = usePathname();
+
+  if (pathname.startsWith('/people/dm')) {
+    return null;
+  }
 
   return (
     <Link
