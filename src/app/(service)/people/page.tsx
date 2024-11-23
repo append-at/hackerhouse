@@ -12,13 +12,13 @@ import { Spinner } from '@/components/ui/spinner';
 import { Header } from '../_layouts/header';
 
 const Page = async () => (
-  <>
+  <div className='flex flex-col h-full'>
     <Header title='Connections' />
 
     <Suspense fallback={<ProfileFallback />}>
       <ProfileList />
     </Suspense>
-  </>
+  </div>
 );
 
 const ProfileList = async () => {
