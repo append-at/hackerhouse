@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS user_conversation (
 COMMENT ON TABLE user_conversation IS 'A conversation between two users.';
 
 ALTER TABLE user_conversation ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Conversations are viewable by participants" ON user_conversation FOR SELECT to authenticated USING (user_id = auth.uid() OR other_user_id = auth.uid());
+CREATE POLICY "Conversations are viewable by participants" ON user_conversation FOR SELECT to authenticated USING (user_id = (SELECT auth.uid() AS uid) OR other_user_id = (SELECT auth.uid() AS uid));
 
 -- User Messages
 CREATE TABLE IF NOT EXISTS user_message (
@@ -40,12 +40,12 @@ COMMENT ON TABLE user_message IS 'Individual messages sent by each user.';
 ALTER TABLE user_message ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Messages are insertable by conversation participants" ON user_message FOR INSERT WITH CHECK (
     conversation_id IN (
-        SELECT id FROM user_conversation WHERE user_id = auth.uid() OR other_user_id = auth.uid()
+        SELECT id FROM user_conversation WHERE user_id = (SELECT auth.uid() AS uid) OR other_user_id = (SELECT auth.uid() AS uid)
     )
 );
 CREATE POLICY "Messages are viewable by participants" ON user_message FOR SELECT to authenticated USING (
     conversation_id IN (
-        SELECT id FROM user_conversation WHERE user_id = auth.uid() OR other_user_id = auth.uid()
+        SELECT id FROM user_conversation WHERE user_id = (SELECT auth.uid() AS uid) OR other_user_id = (SELECT auth.uid() AS uid)
     )
 );
 
@@ -66,7 +66,7 @@ COMMENT ON TABLE ai_conversation IS 'A conversation with the AI.';
 
 ALTER TABLE ai_conversation ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "AI conversations are viewable by the user" ON ai_conversation FOR SELECT to authenticated USING (user_id = auth.uid());
+CREATE POLICY "AI conversations are viewable by the user" ON ai_conversation FOR SELECT to authenticated USING (user_id = (SELECT auth.uid() AS uid));
 
 -- AI Intimacy
 CREATE TABLE IF NOT EXISTS ai_intimacy (
@@ -82,7 +82,7 @@ CREATE INDEX ON ai_intimacy (user_id);
 
 ALTER TABLE ai_intimacy ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "AI intimacies are viewable by the user" ON ai_intimacy FOR SELECT to authenticated USING (user_id = auth.uid());
+CREATE POLICY "AI intimacies are viewable by the user" ON ai_intimacy FOR SELECT to authenticated USING (user_id = (SELECT auth.uid() AS uid));
 
 -- Insights
 CREATE TABLE IF NOT EXISTS insight (
@@ -95,6 +95,6 @@ COMMENT ON TABLE insight IS 'A quote from the AI that was interesting to the use
 
 ALTER TABLE insight ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Insights are viewable by the user" ON insight FOR SELECT to authenticated USING (user_id = auth.uid());
+CREATE POLICY "Insights are viewable by the user" ON insight FOR SELECT to authenticated USING (user_id = (SELECT auth.uid() AS uid));
 
 CREATE INDEX ON insight (user_id);

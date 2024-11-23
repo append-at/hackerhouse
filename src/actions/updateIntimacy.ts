@@ -1,6 +1,6 @@
 'use server';
 
-import { createAdminSupabase } from '@/lib/db/client-admin';
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
 export type IntimacyActionType =
   | 'DAILY_LOGIN'
