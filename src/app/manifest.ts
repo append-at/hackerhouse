@@ -1,11 +1,10 @@
 import type { MetadataRoute } from 'next';
 
 const manifest = (): MetadataRoute.Manifest => {
-  console.log('testing');
   return {
     name: 'Hackerhouse',
     short_name: 'Hackerhouse',
-    description: 'Clubhouse for hackers',
+    description: 'Make one AI friend to get million friends',
     start_url: '/',
     display: 'standalone',
     background_color: '#09090B',

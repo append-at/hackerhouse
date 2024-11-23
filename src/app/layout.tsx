@@ -9,7 +9,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Hackerhouse',
-  description: 'Clubhouse for hackers',
+  description: 'Make one AI friend to get million friends',
 };
 
 type Props = {
