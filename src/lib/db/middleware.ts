@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr';
-import { redirect } from 'next/navigation';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
