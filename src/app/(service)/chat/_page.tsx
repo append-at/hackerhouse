@@ -5,7 +5,7 @@ import { useChat } from 'ai/react';
 import ChatMessageBubble from '@/components/chat/ChatMessageBubble';
 import ChatReactionIndicator from '@/components/chat/ChatReactionIndicator';
 import ChatInputArea from '@/components/chat/ChatInputArea';
-import { HeartIcon, LightbulbIcon } from 'lucide-react';
+import { HeartIcon, LightbulbIcon, SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/app/context';
@@ -95,7 +95,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
             >
               {shouldShowDivider && (
                 <div className='py-3 text-center text-xs text-muted-foreground'>
-                  {dayjs(message.createdAt).format('MMMM D, YYYY')}
+                  {dayjs(message.createdAt).format('MMM D, YYYY')}
                 </div>
               )}
 
@@ -116,7 +116,7 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                       return (
                         <div key={toolCallId}>
                           <ChatReactionIndicator
-                            icon={LightbulbIcon}
+                            icon={SearchIcon}
                             text='Found Insight'
                           />
                           <QuoteCard
@@ -163,13 +163,10 @@ const ChatInterface = ({ sessionId, initialMessages }: Props) => {
                       );
                     }
                     return (
-                      <>
-                        <ChatReactionIndicator
-                          icon={LightbulbIcon}
-                          text='Thinking...'
-                        />
-                        {JSON.stringify({ toolName, args, result: (toolInvocation as any).result }, null, 2)}
-                      </>
+                      <ChatReactionIndicator
+                        icon={LightbulbIcon}
+                        text='Thinking...'
+                      />
                     );
                   })}
                 </div>

@@ -51,7 +51,7 @@ const SelectTopics = () => {
   return (
     <>
       <header className='w-full text-center'>
-        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>
+        <h1 className='tracking-none mx-auto max-w-sm text-3xl font-bold leading-8'>
           <Balancer>Choose topics you’re interested in</Balancer>
         </h1>
       </header>
@@ -72,7 +72,7 @@ const SelectTopics = () => {
                 key={topic.name}
                 data-active={topics.has(topic.name)}
                 className={cn(
-                  'inline-flex h-10 shrink-0 items-center justify-center gap-x-3 rounded-full border border-solid border-secondary px-5 shadow-sm',
+                  'inline-flex h-10 shrink-0 items-center justify-center gap-x-3 rounded-full border border-solid border-secondary px-5 font-medium shadow-sm',
                   '[&+&]:ml-2',
                   'bg-primary-foreground text-foreground',
                   'data-[active="true"]:bg-foreground data-[active="true"]:text-primary-foreground',
@@ -151,7 +151,7 @@ const TOPICS = [
   { name: 'Robotics', emoji: '🦾' },
   { name: 'DevOps', emoji: '🛠️' },
   { name: 'Backend Development', emoji: '🔙' },
-  { name: 'Frontend Development', emoji: '🔙' },
+  { name: 'Frontend Development', emoji: '⏩' },
   { name: 'Mobile Development', emoji: '📱' },
   { name: 'Game Development', emoji: '🎮' },
   { name: 'Product Management', emoji: '📦' },

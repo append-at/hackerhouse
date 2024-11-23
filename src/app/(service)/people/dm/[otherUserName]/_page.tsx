@@ -67,7 +67,7 @@ const ChatInterface = ({ initialMessages, otherUserName, conversationId }: Props
             >
               {shouldShowDivider && (
                 <div className='py-3 text-center text-xs text-muted-foreground'>
-                  {dayjs(message.at).format('MMMM D, YYYY')}
+                  {dayjs(message.at).format('MMM D, YYYY')}
                 </div>
               )}
 
