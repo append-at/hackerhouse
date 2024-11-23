@@ -33,7 +33,7 @@ const ProfileList = async () => {
   );
   const profileMap = await getUserProfiles(userIds);
 
-  return conversations.length === 0 ? (
+  return conversations.length > 0 ? (
     <ul>
       {conversations.map((item) => {
         const counterpartUserId =
