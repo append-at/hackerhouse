@@ -62,7 +62,7 @@ const SetupProfile = ({ user }: Props) => {
   return (
     <>
       <header className='w-full text-center'>
-        <h1 className='mx-auto max-w-sm text-3xl font-semibold'>
+        <h1 className='mx-auto max-w-sm text-3xl font-bold leading-8 tracking-tight'>
           <Balancer>Tell us about yourself</Balancer>
         </h1>
       </header>
@@ -71,7 +71,7 @@ const SetupProfile = ({ user }: Props) => {
         <Form {...form}>
           <form
             id='form'
-            className='w-full space-y-6 px-6'
+            className='w-full space-y-6 px-10'
             onSubmit={form.handleSubmit(handleSubmit)}
           >
             <FormField
