@@ -34,52 +34,30 @@ const AiIntimacy = () => {
   ];
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className='size-10'
-    >
-      <RadialBarChart
-        data={chartData}
-        innerRadius={14}
-        outerRadius={20}
-        barSize={10}
-        endAngle={360 * value * 0.01}
+    <div className='relative'>
+      <ChartContainer
+        config={chartConfig}
+        className='size-10'
       >
-        <RadialBar
-          dataKey='value'
-          background
-          cornerRadius={10}
-        />
-        <PolarRadiusAxis
-          tick={false}
-          tickLine={false}
-          axisLine={false}
+        <RadialBarChart
+          data={chartData}
+          innerRadius={17}
+          outerRadius={20}
+          barSize={10}
+          endAngle={360 * value * 0.01}
         >
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                return (
-                  <text
-                    x={viewBox.cx}
-                    y={viewBox.cy}
-                    textAnchor='middle'
-                    dominantBaseline='middle'
-                  >
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className='fill-orange-300 text-xs leading-none'
-                    >
-                      {chartData[0].value.toFixed(0)}
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
+          <RadialBar
+            dataKey='value'
+            background
+            cornerRadius={10}
           />
-        </PolarRadiusAxis>
-      </RadialBarChart>
-    </ChartContainer>
+        </RadialBarChart>
+      </ChartContainer>
+
+      <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-300 text-sm text-center'>
+        {value.toFixed(0)}
+      </span>
+    </div>
   );
 };
 
