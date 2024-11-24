@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 
 import * as fonts from './fonts';
+import { Providers } from './providers';
 
 import './globals.css';
 
@@ -34,10 +35,12 @@ const Layout = ({ children }: Props) => (
       )}
     >
       <WrapProvider preferNative={false}>
-        <main className='mx-auto min-h-dvh max-w-md sm:border-x sm:border-solid sm:border-border'>
-          {children}
-        </main>
-        <Toaster />
+        <Providers>
+          <main className='mx-auto min-h-dvh max-w-md sm:border-x sm:border-solid sm:border-border'>
+            {children}
+          </main>
+          <Toaster />
+        </Providers>
       </WrapProvider>
     </body>
   </html>

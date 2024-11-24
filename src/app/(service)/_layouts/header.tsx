@@ -8,12 +8,15 @@ type Props = Omit<React.HTMLProps<HTMLElement>, 'title' | 'path'> & {
   title: React.ReactNode;
 };
 
-export const Header = ({ title, className, ...props }: Props) => (
+export const Header = ({ title, children, className, ...props }: Props) => (
   <header
     {...props}
-    className={cn('flex h-20 shrink-0 items-center px-6', className)}
+    className={cn(
+      'flex justify-between h-20 shrink-0 items-center px-6',
+      className,
+    )}
   >
-    <h1 className='text-3xl font-bold tracking-tight'>{title}</h1>
+    {children ?? <h1 className='text-3xl font-bold tracking-tight'>{title}</h1>}
   </header>
 );
 

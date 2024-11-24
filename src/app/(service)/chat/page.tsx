@@ -6,6 +6,7 @@ import { createServerSupabase } from '@/lib/db/supabase/server';
 
 import { Header } from '../_layouts/header';
 import ChatInterface from './_page';
+import AiIntimacy from './ai-intimacy';
 
 const Page = async () => {
   const supabase = await createServerSupabase();
@@ -40,9 +41,12 @@ const Page = async () => {
   return (
     <div className='flex h-full flex-col'>
       <Header
+        title='Chat'
         className='h-16'
-        title={<Logo className='h-6 w-auto' />}
-      />
+      >
+        <Logo className='h-6 w-auto' />
+        <AiIntimacy />
+      </Header>
       <ChatInterface
         sessionId={sessionId}
         initialMessages={initialMessages}
