@@ -94,7 +94,6 @@ export default function SubscribePushNotificationButton() {
 
         <Switch
           checked={isSubscribed}
-          disabled={isSubscribed}
           onCheckedChange={handleToggle}
         />
       </div>
