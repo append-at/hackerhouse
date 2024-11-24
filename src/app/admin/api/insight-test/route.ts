@@ -1,5 +1,5 @@
-import { searchInsights } from "@/agents/peoplexity";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import { searchInsights } from '@/agents/peoplexity';
 
 export const runtime = 'nodejs';
 

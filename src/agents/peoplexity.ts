@@ -1,6 +1,7 @@
 import { getCurrentIntimacy } from '@/actions/intimacy';
-import { createAdminSupabase } from '@/lib/db/supabase/admin';
 import OpenAI from 'openai';
+
+import { createAdminSupabase } from '@/lib/db/supabase/admin';
 
 export async function searchInsights(consideration: string) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -26,7 +27,11 @@ export async function searchInsights(consideration: string) {
 /**
  * Search relevant insights and offer to introduce them to the user.
  */
-export async function peoplexity(userId: string, situation: string, consideration: string) {
+export async function peoplexity(
+  userId: string,
+  situation: string,
+  consideration: string,
+) {
   const currentIntimacy = await getCurrentIntimacy(userId);
 
   // TODO: implement algorithm

@@ -170,8 +170,19 @@ Call searchForInsight if user has any concern/question/consideration.
   const activeTools: (keyof typeof tools)[] = askedForInsight
     ? ['userConfirmedToShareInsight']
     : allowedToConnectUser
-      ? ['connectPeople', 'searchForInsight', 'askForSharingInsight', 'increaseIntimacy', 'decreaseIntimacy']
-      : ['searchForInsight', 'askForSharingInsight', 'increaseIntimacy', 'decreaseIntimacy'];
+      ? [
+          'connectPeople',
+          'searchForInsight',
+          'askForSharingInsight',
+          'increaseIntimacy',
+          'decreaseIntimacy',
+        ]
+      : [
+          'searchForInsight',
+          'askForSharingInsight',
+          'increaseIntimacy',
+          'decreaseIntimacy',
+        ];
 
   return {
     system,
